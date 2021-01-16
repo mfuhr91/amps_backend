@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AmpsApplication<amps>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.mutual.amps.AmpsApplication",
+            "projectName": "amps",
+            "args": ""
+        }
+    ]
+}
