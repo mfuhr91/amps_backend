@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TipoDocumento implements Serializable {
    
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = -3927813619267843938L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

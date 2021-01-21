@@ -1,7 +1,7 @@
 package com.mutual.amps.socios.models;
 
 import java.io.Serializable;
-import java.sql.Blob;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,20 +18,23 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mutual.amps.fotos.models.Foto;
 import com.mutual.amps.localidades.models.Localidad;
 import com.mutual.amps.usuarios.models.Usuario;
+import com.mutual.amps.variables.models.Variable;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "socios")
 @Data
+@NoArgsConstructor
 public class Socio implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8033770548789716221L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +49,10 @@ public class Socio implements Serializable {
     /* @NotBlank */
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
+    @JoinColumn(name = "tipo_id")
+    private Tipo tipo;
 
     private Long cuil;
-
-    /* @NotBlank */
-    @Column(name = "cuota_social")
-    private Double cuotaSocial;
 
     private String direccion;
 
@@ -67,8 +66,15 @@ public class Socio implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaNacimiento;
 
-   
-    private String foto;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variable_id")
+    private Variable cuotaSocial;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "foto_id")
+    private Foto foto;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -124,10 +130,5 @@ public class Socio implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Socio() {
-        this.baja = false;
-        this.extranjero = false;
-        this.fechaAlta = new Date();
-    }
-
+   
 }

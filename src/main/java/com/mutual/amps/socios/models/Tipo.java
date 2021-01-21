@@ -12,12 +12,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table( name = "categorias")
+@Table( name = "tipos")
 @Data
 @NoArgsConstructor
-public class Categoria implements Serializable{
+public class Tipo implements Serializable{
 
-    private static final long serialVersionUID = 6L;
+    
+    private static final long serialVersionUID = 5767056502263097241L;
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

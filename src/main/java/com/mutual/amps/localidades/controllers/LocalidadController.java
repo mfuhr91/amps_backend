@@ -29,7 +29,7 @@ public class LocalidadController {
     @GetMapping()
     public ResponseEntity<List<Localidad>> listar() {
 
-        System.out.println("Socios listados");
+        System.out.println("Localidades listadas");
 
         return ResponseEntity.status(HttpStatus.OK).body(this.localidadService.listarTodo());
     }

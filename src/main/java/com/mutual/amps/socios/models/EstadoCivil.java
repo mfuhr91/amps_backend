@@ -17,8 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EstadoCivil implements Serializable {
 
-    
-    private static final long serialVersionUID = 1L;
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6980045323023070102L;
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

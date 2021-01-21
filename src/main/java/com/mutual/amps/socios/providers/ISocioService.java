@@ -2,9 +2,9 @@ package com.mutual.amps.socios.providers;
 
 import java.util.List;
 
-import com.mutual.amps.socios.models.Categoria;
 import com.mutual.amps.socios.models.EstadoCivil;
 import com.mutual.amps.socios.models.Socio;
+import com.mutual.amps.socios.models.Tipo;
 import com.mutual.amps.socios.models.TipoDocumento;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +29,13 @@ public interface ISocioService {
     @Transactional(readOnly = true)
     public List<EstadoCivil> listarEstadosCiviles();
 
+
     @Transactional(readOnly = true)
-    public List<Categoria> listarCategorias();
+    public List<Tipo> listarTipos();
+
+
+
+    
 
 
     

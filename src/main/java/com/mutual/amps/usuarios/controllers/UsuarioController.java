@@ -35,11 +35,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(rolService.listarTodo());
     }
     @GetMapping("roles/{id}")
-    public ResponseEntity<Rol> listarRoles(@PathVariable Integer id) {
-
-        Rol rol = this.rolService.buscarPorId(id);
-
-        System.out.println("Rol encontrado!");
+    public ResponseEntity<Rol> buscarRol(@PathVariable Integer id) {
 
         return ResponseEntity.status(HttpStatus.OK).body(this.rolService.buscarPorId(id));
     }
