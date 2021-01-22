@@ -59,11 +59,11 @@ public class Socio implements Serializable {
     private Boolean extranjero;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
     private Date fechaIngresoLaboral;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
     private Date fechaNacimiento;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -77,11 +77,11 @@ public class Socio implements Serializable {
     private Foto foto;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
     private Date fechaAlta;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
     private Date fechaBaja;
 
     /* @NotBlank */
