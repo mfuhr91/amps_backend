@@ -1,0 +1,21 @@
+target/test-classes
+target/surefire-reports
+target/maven-status
+target/maven-archiver
+target/maven-archiver
+target/generated-test-sources
+target/generated-sources
+target/classes
+target/*.original
+
+# IDE - VSCode
+.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# System Files
+.DS_Store
+Thumbs.db
