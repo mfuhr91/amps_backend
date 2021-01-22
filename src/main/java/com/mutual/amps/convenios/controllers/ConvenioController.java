@@ -55,7 +55,7 @@ public class ConvenioController {
     @PostMapping("crear")
     public ResponseEntity<Convenio> agregar(@RequestBody Convenio convenio) {
  
-        if(convenio.getFoto().getId() != null) {
+        if(convenio.getFoto().getUrl() != "") {
 
             fotoService.guardarFoto(convenio.getFoto());
             convenio.setFoto(convenio.getFoto());

@@ -43,9 +43,6 @@ public class SocioController {
     private ISocioService socioService;
 
     @Autowired
-    private IVariableService variableService;
-
-    @Autowired
     private IUsuarioService usuarioService;
 
     @GetMapping()
@@ -83,16 +80,13 @@ public class SocioController {
     @PostMapping("crear")
     public ResponseEntity<Socio> agregar(@RequestBody Socio socio) {
  
-        if( socio.getFoto().getId() != null ) {
+        if(socio.getFoto().getUrl() != "") {
 
             fotoService.guardarFoto(socio.getFoto());
             socio.setFoto(socio.getFoto());
-
         } else {
             socio.setFoto(null);
         }
-    
-
 
         
         usuarioService.guardar(socio.getUsuario());
