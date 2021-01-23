@@ -34,6 +34,7 @@ com/mutual/amps/convenios/controllers/ConvenioController.class
 com/mutual/amps/usuarios/controllers/UsuarioController.class
 com/mutual/amps/socios/models/repo/IEstadoCivilRepo.class
 com/mutual/amps/usuarios/providers/IRolService.class
+com/mutual/amps/AppConfig.class
 com/mutual/amps/usuarios/providers/RolServiceImpl.class
 com/mutual/amps/convenios/models/repo/IConvenioRepo.class
 com/mutual/amps/socios/controllers/SocioController.class
@@ -41,6 +42,7 @@ com/mutual/amps/usuarios/models/repo/IRolRepo.class
 com/mutual/amps/socios/models/Tipo.class
 com/mutual/amps/socios/models/repo/ISocioRepo.class
 com/mutual/amps/fotos/models/repo/IFotoRepo.class
+com/mutual/amps/AppConfig$1.class
 com/mutual/amps/usuarios/providers/IUsuarioService.class
 com/mutual/amps/variables/models/Variable.class
 com/mutual/amps/socios/models/repo/ITipoRepo.class

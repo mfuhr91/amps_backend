@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/variables")
-@CrossOrigin(origins = {"http://localhost:4200", "https://amps-front-test.herokuapp.com" }, methods = { RequestMethod.GET, RequestMethod.PUT})
+/* @CrossOrigin(origins = {"http://localhost:4200", "https://amps-front-test.herokuapp.com" }, 
+                methods = { RequestMethod.GET, RequestMethod.PUT}) */
 public class VariableController {
     
     @Autowired

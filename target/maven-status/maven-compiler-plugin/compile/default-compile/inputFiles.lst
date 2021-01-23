@@ -26,6 +26,7 @@
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/categorias/models/repo/ICategoriaRepo.java
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/convenios/controllers/ConvenioController.java
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/fotos/providers/IFotoService.java
+/Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/AppConfig.java
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/fotos/providers/CloudinaryService.java
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/socios/providers/ISocioService.java
 /Users/marianofuhr/proyectos/sistema-mutual-seguridad/backend/src/main/java/com/mutual/amps/socios/models/Socio.java
