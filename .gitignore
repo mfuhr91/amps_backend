@@ -19,3 +19,5 @@ target/*.original
 # System Files
 .DS_Store
 Thumbs.db
+
+src/main/resources/application.yml.test
