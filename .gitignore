@@ -17,7 +17,7 @@ target/*.original
 .history/*
 
 # System Files
-.DS_Store
+*.DS_Store
 Thumbs.db
 
 src/main/resources/application.yml.test
