@@ -29,5 +29,5 @@ logging:
             hibernate:
                 SQL: debug 
 
-server:
+server: #IMPORTANTE PARA PODER CONECTARSE DESDE HEROKU
     port: ${PORT:8080}
