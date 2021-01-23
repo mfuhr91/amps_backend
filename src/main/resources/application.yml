@@ -3,12 +3,6 @@ spring:
         url: ${DB_URL}
         username: ${DB_USER}
         password: ${DB_PASS}
-        # url: jdbc:mysql://us-cdbr-east-03.cleardb.com/heroku_31977c4c268cada?reconnect=true
-        # username: b12f934281b05a
-        # password: e75bfbf6
-        # url: jdbc:mysql://localhost/amps_db?serverTimezone=America/Argentina/Ushuaia
-        # username: admin
-        # password: 2744mfuhR
         driver-class-name: com.mysql.cj.jdbc.Driver
 
 
@@ -33,4 +27,4 @@ logging:
                 SQL: debug 
 
 server: #IMPORTANTE PARA PODER CONECTARSE DESDE HEROKU
-    port: ${PORT:8080}
+    port: ${PORT}
