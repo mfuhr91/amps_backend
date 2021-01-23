@@ -22,9 +22,12 @@ spring:
             favor-parameter: true
             media-types.pdf: application/pdf
             media-types.json: application/json
-        
+
 logging:
    level:
         org:
             hibernate:
                 SQL: debug 
+
+server:
+    port: ${PORT:8080}
