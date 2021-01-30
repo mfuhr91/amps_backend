@@ -14,7 +14,7 @@ public class AppConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200","https://amps-front-test.herokuapp.com")
+                        .allowedOrigins("https://amps-front-test.herokuapp.com")
 		                .allowedMethods("PUT", "DELETE","POST","GET");
             }
         };
