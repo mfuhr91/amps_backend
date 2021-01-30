@@ -3,7 +3,9 @@ package com.mutual.amps.socios.models;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,13 +14,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mutual.amps.descuentos.models.Descuento;
 import com.mutual.amps.fotos.models.Foto;
 import com.mutual.amps.localidades.models.Localidad;
 import com.mutual.amps.usuarios.models.Usuario;
@@ -58,12 +63,12 @@ public class Socio implements Serializable {
 
     private Boolean extranjero;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaIngresoLaboral;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaNacimiento;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -76,12 +81,12 @@ public class Socio implements Serializable {
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAlta;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    /* @DateTimeFormat(pattern = "dd/MM/yyyy") */
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 
     /* @NotBlank */
@@ -129,6 +134,11 @@ public class Socio implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Descuento> descuento;
 
    
 }

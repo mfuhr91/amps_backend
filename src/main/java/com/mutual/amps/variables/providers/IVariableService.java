@@ -21,5 +21,4 @@ public interface IVariableService {
 
     public void guardar(Variable socio);
 
-    /* public void eliminar(Integer id); */
 }

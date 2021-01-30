@@ -36,5 +36,15 @@ public class ConvenioServiceImpl implements IConvenioService {
         this.convenioRepo.deleteById(id);
 
     }
+
+    @Override
+    public List<Convenio> buscar(String param) {
+        return this.convenioRepo.findByParam(param);
+    }
+
+    @Override
+    public Integer contarConvenios() {
+        return this.convenioRepo.contarConvenios();
+    }
     
 }

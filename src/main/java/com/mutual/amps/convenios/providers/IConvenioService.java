@@ -17,5 +17,13 @@ public interface IConvenioService {
     public void guardar(Convenio convenio);
 
     public void eliminar(Integer id);
+
+    @Transactional(readOnly = true)
+    public List<Convenio> buscar(String parametro);
+    
+    @Transactional(readOnly = true)
+    public Integer contarConvenios();
+
+
     
 }

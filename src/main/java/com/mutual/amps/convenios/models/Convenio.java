@@ -2,7 +2,9 @@ package com.mutual.amps.convenios.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,13 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mutual.amps.categorias.models.Categoria;
+import com.mutual.amps.descuentos.models.Descuento;
 import com.mutual.amps.fotos.models.Foto;
 import com.mutual.amps.localidades.models.Localidad;
 import com.mutual.amps.usuarios.models.Usuario;
@@ -62,11 +67,11 @@ public class Convenio implements Serializable {
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAlta;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 
@@ -80,6 +85,11 @@ public class Convenio implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "convenio", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Descuento> descuento;
 
     
 
