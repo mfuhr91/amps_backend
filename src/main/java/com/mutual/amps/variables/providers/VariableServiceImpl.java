@@ -34,11 +34,5 @@ public class VariableServiceImpl implements IVariableService {
         this.variableRepo.save(variable);
 
     }
-
-  /*   @Override
-    public void eliminar(Integer id) {
-       this.variableRepo.delete(entity);
-
-    } */
     
 }

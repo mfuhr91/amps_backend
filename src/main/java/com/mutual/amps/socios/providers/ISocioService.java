@@ -33,9 +33,11 @@ public interface ISocioService {
     @Transactional(readOnly = true)
     public List<Tipo> listarTipos();
 
+    @Transactional(readOnly = true)
+    public List<Socio> buscar(String parametro);
 
-
-    
+    @Transactional(readOnly = true)
+    public Integer contarSocios();
 
 
     

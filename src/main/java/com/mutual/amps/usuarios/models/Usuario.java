@@ -2,7 +2,6 @@ package com.mutual.amps.usuarios.models;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,11 +37,12 @@ public class Usuario implements Serializable{
 
     private String contraseña;
 
-    @Temporal(TemporalType.TIMESTAMP)
+
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAlta;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 

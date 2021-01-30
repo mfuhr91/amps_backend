@@ -10,7 +10,6 @@ import com.mutual.amps.usuarios.providers.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,13 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("convenios")
-/* @CrossOrigin(origins = {"http://localhost:4200", "https://amps-front-test.herokuapp.com" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-    RequestMethod.DELETE }) */
 public class ConvenioController {
 
 
@@ -92,11 +88,7 @@ public class ConvenioController {
 
         convenio.setUsuario(convenio.getUsuario());
 
-        /* socio.setFoto(this.url); */
-
         convenioService.guardar(convenio);
-
-        /* this.url = null; */
 
         return ResponseEntity.status(HttpStatus.OK).body(convenio);
 
@@ -110,5 +102,18 @@ public class ConvenioController {
 
         return ResponseEntity.status(HttpStatus.OK).body(convenio);
     }
+
+    @GetMapping("buscar/{param}")
+    public ResponseEntity<List<Convenio>> buscar(@PathVariable String param) {
+        
+        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.buscar(param));
+    }
+
+    @GetMapping("contar")
+    public ResponseEntity<Integer> contar() {
+        
+        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.contarConvenios() - 1);
+    }
+   
     
 }

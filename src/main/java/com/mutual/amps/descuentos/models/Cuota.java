@@ -48,8 +48,8 @@ public class Cuota implements Serializable {
     @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy UTC-3")
     private Date fechaCuota;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.LAZY )
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})git 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "descuento_id")
     @JsonIgnore
     private Descuento descuento;
