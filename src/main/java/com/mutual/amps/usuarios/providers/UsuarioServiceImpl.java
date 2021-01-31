@@ -35,4 +35,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public void eliminar(Integer id) {
         this.usuarioRepo.deleteById(id);
     }
+
+    @Override
+    public List<Usuario> buscar(String param) {
+      return this.usuarioRepo.findByParam(param);
+    }
 }
