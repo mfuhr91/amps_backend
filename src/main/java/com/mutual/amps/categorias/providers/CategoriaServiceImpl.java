@@ -35,4 +35,14 @@ public class CategoriaServiceImpl implements ICategoriaService {
         this.categoriaRepo.deleteById(id);
     }
 
+    @Override
+    public Categoria buscarPorNombre(String nombre) {
+        return this.categoriaRepo.findByNombre(nombre);
+    }
+
+    @Override
+    public List<Categoria> buscar(String param) {
+        return this.categoriaRepo.findByParam(param);
+    }
+
 }

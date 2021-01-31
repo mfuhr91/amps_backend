@@ -15,7 +15,15 @@ public interface ICategoriaService {
     @Transactional(readOnly = true)
     public Categoria buscarPorId(Integer id);
 
+    @Transactional(readOnly = true)
+    public Categoria buscarPorNombre(String nombre);
+
     public void guardar(Categoria categoria);
 
     public void eliminar(Integer id);
+
+    @Transactional(readOnly = true)
+    public List<Categoria> buscar(String param);
+
+
 }
