@@ -2,6 +2,7 @@ package com.mutual.amps.convenios.providers;
 
 import java.util.List;
 
+import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.convenios.models.Convenio;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public interface IConvenioService {
     
     @Transactional(readOnly = true)
     public Integer contarConvenios();
+
+    @Transactional(readOnly = true)
+    public List<Convenio> buscarPorCategoria(Categoria categoria);
 
 
     

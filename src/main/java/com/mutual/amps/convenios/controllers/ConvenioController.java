@@ -2,6 +2,8 @@ package com.mutual.amps.convenios.controllers;
 
 import java.util.List;
 
+import com.mutual.amps.categorias.models.Categoria;
+import com.mutual.amps.categorias.providers.ICategoriaService;
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.providers.IConvenioService;
 import com.mutual.amps.fotos.providers.IFotoService;
@@ -31,6 +33,9 @@ public class ConvenioController {
 
     @Autowired
     private IConvenioService convenioService;
+
+    @Autowired
+    private ICategoriaService categoriaService;
 
     @GetMapping()
     public ResponseEntity<List<Convenio>> listar() {
@@ -113,6 +118,17 @@ public class ConvenioController {
     public ResponseEntity<Integer> contar() {
         
         return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.contarConvenios() - 1);
+    }
+
+    @GetMapping("categoria/{nombreCategoria}")
+    public ResponseEntity<List<Convenio>> buscarPorCategoria(@PathVariable String nombreCategoria) {
+
+        System.out.println(nombreCategoria);
+        
+        Categoria cat = this.categoriaService.buscarPorNombre(nombreCategoria);
+
+                
+        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.buscarPorCategoria(cat));
     }
    
     

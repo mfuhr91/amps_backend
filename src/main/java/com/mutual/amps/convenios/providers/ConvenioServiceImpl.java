@@ -2,12 +2,12 @@ package com.mutual.amps.convenios.providers;
 
 import java.util.List;
 
+import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.models.repo.IConvenioRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class ConvenioServiceImpl implements IConvenioService {
@@ -22,7 +22,7 @@ public class ConvenioServiceImpl implements IConvenioService {
 
     @Override
     public Convenio buscarPorId(Integer id) {
-       return this.convenioRepo.findById(id).orElse(null);
+        return this.convenioRepo.findById(id).orElse(null);
     }
 
     @Override
@@ -45,6 +45,11 @@ public class ConvenioServiceImpl implements IConvenioService {
     @Override
     public Integer contarConvenios() {
         return this.convenioRepo.contarConvenios();
+    }
+
+    @Override
+    public List<Convenio> buscarPorCategoria(Categoria categoria) {
+        return this.convenioRepo.findByCategoria(categoria);
     }
     
 }
