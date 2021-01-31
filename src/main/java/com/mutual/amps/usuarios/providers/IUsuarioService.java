@@ -17,5 +17,8 @@ public interface IUsuarioService {
     public void guardar(Usuario usuario);
 
     public void eliminar(Integer id);
+
+    @Transactional(readOnly = true)
+    public List<Usuario> buscar(String param);
     
 }

@@ -5,8 +5,8 @@ target/maven-archiver
 target/maven-archiver
 target/generated-test-sources
 target/generated-sources
-target/classes
 target/*.original
+target/*
 
 # IDE - VSCode
 .vscode
@@ -21,3 +21,4 @@ target/*.original
 Thumbs.db
 
 src/main/resources/application.yml.test
+src/main/resources/import.sql
