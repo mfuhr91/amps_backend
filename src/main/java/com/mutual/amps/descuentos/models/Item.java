@@ -28,14 +28,14 @@ public class Item implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)     
-    private Long Id;
+    private Long id;
 
     private Double valorSubTotal;
 
     private Double valorTotal;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descuento_id")
     @JsonIgnore
     private Descuento descuento;

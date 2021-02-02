@@ -2,7 +2,7 @@ package com.mutual.amps.socios.providers;
 
 import java.util.List;
 
-import com.mutual.amps.descuentos.providers.IDescuentoService;
+
 import com.mutual.amps.socios.models.EstadoCivil;
 
 import com.mutual.amps.socios.models.Socio;
@@ -29,9 +29,6 @@ public class SocioServiceImpl implements ISocioService {
     @Autowired
     private ITipoRepo tipoRepo;
 
-    @Autowired
-    private IDescuentoService descuentosService;
-
 
     @Override
     public List<Socio> listarTodo() {
@@ -47,8 +44,6 @@ public class SocioServiceImpl implements ISocioService {
     @Override
     public void guardar(Socio socio) {
         this.socioRepo.save(socio);
-
-        this.descuentosService.crearDescuentoCuotaSocial(socio);
 
     }
 

@@ -15,7 +15,11 @@ public class AppConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("https://amps-front-test.herokuapp.com")
+<<<<<<< HEAD
                        /*  .allowedOrigins("http://localhost:4200") */
+=======
+                        /* .allowedOrigins("http://localhost:4200") */
+>>>>>>> dev
 		                .allowedMethods("PUT", "DELETE","POST","GET");
             }
         };

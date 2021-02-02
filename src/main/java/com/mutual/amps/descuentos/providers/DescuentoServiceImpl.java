@@ -1,6 +1,5 @@
 package com.mutual.amps.descuentos.providers;
 
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +25,7 @@ import com.mutual.amps.variables.models.Variable;
 import com.mutual.amps.variables.models.repo.IVariableRepo;
 import com.mutual.amps.variables.providers.IVariableService;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -126,8 +126,7 @@ public class DescuentoServiceImpl implements IDescuentoService {
                 descuento.setUltimaCuota(cal.getTime());
 
             }
-          
-            /* this.descuentoRepo.save(descuento); */
+    
             
             cuota = new Cuota(montoCuota, i, cal.getTime());
             cuotas.add(cuota);
@@ -193,75 +192,64 @@ public class DescuentoServiceImpl implements IDescuentoService {
         return this.descuentoRepo.getDescuentosByFechaCuota(fecha);
     }
 
+    @Override
+    public Double sumarTotalRecaudado() {
+       return this.descuentoRepo.sumarTotalRecaudado();
+    }
+
+    @Override
+    public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion ) {
+       return this.descuentoRepo.buscarDescuentoBySocioByFechaAltaByDescripcion(socioId, fechaAlta, descripcion);
+    }
+
     
     /* @Scheduled(cron="15 * * * * *") */
-    /* @Scheduled(cron = "15 * * * * *") */
     @Override
     @Scheduled(cron="0 0 1 * * *", zone = "America/Argentina/Ushuaia")
     public void guardarCuotaSocial() {
+
         List<Socio> socios = this.socioService.listarTodo();
-        Calendar cal = Calendar.getInstance(); 
+        
         Variable variableDiaCierre = this.variableService.buscarPorId(4);
-
+        
+        // FECHA DE CIERRE FORMATO: Fri Jan 20 09:59:30 ART 2021
         Integer diaCierre = (int) Math.round(variableDiaCierre.getValor());
-
-        System.out.println(cal.toString());
-        if(cal.get(Calendar.MONTH) == 0) {
-            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
-            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 11);
-            
-            cal.set(Calendar.DAY_OF_MONTH, diaCierre);
-            System.out.println(cal.toString());
-            
-        } else if(cal.get(Calendar.MONTH) == 1) {
-
-            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
-            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 12);
-            
-            cal.set(Calendar.DAY_OF_MONTH, diaCierre);
-            
-            
-        } else {
-            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - 1);
-            cal.set(Calendar.DAY_OF_MONTH, diaCierre);
-            System.out.println(cal.toString());
-        }
-    
+        
+        Calendar cal = Calendar.getInstance();
+        /* cal.set(Calendar.MONTH, 3); */ // TODO: BORRAR
+        Calendar calMesAnterior = this.getFechaCierreMesAnterior(cal, diaCierre + 1);
+        /* System.out.println("********************************:   " + calMesAnterior.getTime()); */
         
         socios.forEach(socio -> {
-
-            if( socio.getFechaAlta().before(cal.getTime())){
-
-                this.crearDescuentoCuotaSocial(socio);
-
+            
+            if( socio.getFechaAlta().before(calMesAnterior.getTime()) && !socio.getBaja()){
+            
+                
+                this.crearDescuentos(socio);
             }
-
-
         });
     }
 
     @Override
-    public void crearDescuentoCuotaSocial(Socio socio) {
+    public void crearDescuentos(Socio socio) {
 
-        Descuento nuevoDescuento = new Descuento();
-        Item item = new Item();
+        
+        Date fechaHoy = new Date();
 
-        Convenio convenio = this.convenioService.buscarPorId(1);
-
-        Cuota cuota = new Cuota();
-       
-
-        Calendar cal = Calendar.getInstance();
-    
-        Variable cuotaSocial = this.variableService.buscarPorId(1);
-
-
-        // FECHA DE CIERRE FORMATO: Fri Jan 29 09:59:30 ART 2021
         Variable variableDiaCierre = this.variableService.buscarPorId(4);
 
+        // FECHA DE CIERRE FORMATO: Fri Jan 20 09:59:30 ART 2021
         Integer diaCierre = (int) Math.round(variableDiaCierre.getValor());
 
-        Date fechaHoy = new Date();
+            
+        Convenio convenio = this.convenioService.buscarPorId(1);
+
+        Calendar cal = Calendar.getInstance();
+
+        cal = this.getFechaCierreMesAnterior(cal, diaCierre + 1); 
+        
+
+        
 
         Calendar cal2 = Calendar.getInstance();
         // ASIGNO AL CALENDARIO LA FECHA DE CIERRE
@@ -273,38 +261,153 @@ public class DescuentoServiceImpl implements IDescuentoService {
         
         
         if(fechaHoy.getTime() >= fechaCierre.getTime() && fechaHoy.getTime() <= ultimoDiaMes.getTime()){
-            cal.add(Calendar.MONTH, 2);
+            cal2.add(Calendar.MONTH, 2);
+            cal2.set(Calendar.DAY_OF_MONTH, cal2.getActualMinimum(Calendar.DAY_OF_MONTH));
         } else if(fechaHoy.getTime() < fechaCierre.getTime()) {
-            cal.add(Calendar.MONTH, 1);
+            cal2.add(Calendar.MONTH, 1);
+            cal2.set(Calendar.DAY_OF_MONTH, cal2.getActualMinimum(Calendar.DAY_OF_MONTH));
         }
-  
-        nuevoDescuento.setDescripcion("Cuota Social");
-        nuevoDescuento.setValorTotal(cuotaSocial.getValor());
-        nuevoDescuento.setSocio(socio);
-        nuevoDescuento.setNumCuotas(1);
-        nuevoDescuento.setFechaAlta(new Date());
-        nuevoDescuento.setUltimaCuota(cal.getTime());
-        nuevoDescuento.setConvenio(convenio);
-        this.descuentoRepo.save(nuevoDescuento); 
+
+        /* System.out.println("###### SOCIO: " + socio.getId() + " - " + socio.getApellido() + ", " + socio.getNombre()); */
+        
+        Descuento descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Cuota social");
+        /* System.out.println(cal.getTime()); */
+        
+        
+        if(descuentoBuscado == null){
+
+            Variable cuotaSocial = this.variableService.buscarPorId(1);
+    
+            Descuento descuentoCuotaSocial = new Descuento();
+            Cuota cuotaCuotaSocial = new Cuota();
+            Item itemCuotaSocial = new Item();
+    
+            this.crearUnDescuento("Cuota social", cuotaSocial.getValor(), socio, cal2, convenio, descuentoCuotaSocial, cuotaCuotaSocial, itemCuotaSocial);
+            
+
+        }
+
+        descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Cuota deportiva");
+        if(descuentoBuscado == null){
+            if(socio.getCuotaDeporte() != null){
+                Descuento descuentoDeporte = new Descuento();
+                Cuota cuotaDeporte = new Cuota();
+                Item itemDeporte = new Item();
+                this.crearUnDescuento("Cuota deportiva", socio.getCuotaDeporte(), socio, cal2, convenio, descuentoDeporte, cuotaDeporte, itemDeporte);
+            }
+        } else {
+        
+            Cuota cuota = descuentoBuscado.getCuotas().get(0);
+            cuota.setMontoCuota(socio.getCuotaDeporte());
+            
+            this.cuotaRepo.save(cuota);
+
+            Item item = descuentoBuscado.getItems().get(0);
+            item.setValorSubTotal(socio.getCuotaDeporte());
+            item.setValorTotal(socio.getCuotaDeporte());
+
+            this.itemRepo.save(item);
+
+            descuentoBuscado.setValorCuota(socio.getCuotaDeporte());
+            descuentoBuscado.setValorTotal(socio.getCuotaDeporte());
+
+            this.descuentoRepo.save(descuentoBuscado);
+
+            
+        }
+
+        descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Seguro vida flia");
+        if(descuentoBuscado == null){
+            if(socio.getSeguroVida() != null){
+
+                Descuento descuentoSeguro = new Descuento();
+                Cuota cuotaSeguro = new Cuota();
+                Item itemSeguro = new Item();
+                this.crearUnDescuento("Seguro vida flia", socio.getSeguroVida(), socio, cal2, convenio, descuentoSeguro, cuotaSeguro, itemSeguro);
+                
+            }
+        } else {
+
+            Cuota cuota = descuentoBuscado.getCuotas().get(0);
+            cuota.setMontoCuota(socio.getSeguroVida());
+            
+            this.cuotaRepo.save(cuota);
+
+            Item item = descuentoBuscado.getItems().get(0);
+            item.setValorSubTotal(socio.getSeguroVida());
+            item.setValorTotal(socio.getSeguroVida());
+
+            this.itemRepo.save(item);
+            
+            descuentoBuscado.setValorCuota(socio.getSeguroVida());
+            descuentoBuscado.setValorTotal(socio.getSeguroVida());
+
+            this.descuentoRepo.save(descuentoBuscado);
+        }
+    }
+
+    private void crearUnDescuento(String descripcion, Double montoDescuento, Socio socio, Calendar cal, Convenio convenio, Descuento descuento, Cuota cuota, Item item){
+
+       /*  System.out.println(montoDescuento); */
+        
+        descuento.setDescripcion(descripcion);
+        descuento.setValorCuota(montoDescuento);
+        descuento.setValorTotal(montoDescuento);
+        descuento.setSocio(socio);
+        descuento.setNumCuotas(1);
+        descuento.setFechaAlta(new Date());
+        descuento.setUltimaCuota(cal.getTime());
+        descuento.setConvenio(convenio);
+        this.descuentoRepo.save(descuento);
+       
+         
+        item.setValorSubTotal(montoDescuento);
+        item.setValorTotal(montoDescuento);
+        item.setDescuento(descuento);
+        this.itemRepo.save(item);
 
         cuota.setFechaCuota(cal.getTime());
-        cuota.setMontoCuota(cuotaSocial.getValor());
+        cuota.setMontoCuota(montoDescuento);
         cuota.setNumCuota(1);
-        cuota.setDescuento(nuevoDescuento);
-        this.cuotaRepo.save(cuota);
-          
-        item.setValorSubTotal(cuotaSocial.getValor());
-        item.setValorTotal(cuotaSocial.getValor());
-        item.setDescuento(nuevoDescuento);
-        this.itemRepo.save(item);
         
-       
+        cuota.setDescuento(descuento);
+        this.cuotaRepo.save(cuota);
+        
+
     }
 
-    @Override
-    public Double sumarTotalRecaudado() {
-       return this.descuentoRepo.sumarTotalRecaudado();
+   
+
+    private Calendar getFechaCierreMesAnterior(Calendar cal, int dia){  
+              
+       /*  System.out.println("###### HOY:  " + cal.getTime()); */
+
+        // 0 = ENERO - 11 = DICIEMBRE
+        if(cal.get(Calendar.MONTH) == 0) { // OK ->  1 mes y 5 dias antes del 1ro de cada mes
+            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
+            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 10); // MES DE ENERO + 11 meses = NOVIEMBRE
+            
+            cal.set(Calendar.DAY_OF_MONTH, dia);
+           /*  System.out.println("###### UN AÑO Y DOS MES ANTES:  " + cal.getTime()); */
+            
+        } else if(cal.get(Calendar.MONTH) == 1) {
+            
+            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
+            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 10); // MES DE FEBRERO + 10 meses = DICIEMBRE
+            
+            cal.set(Calendar.DAY_OF_MONTH, dia); 
+            
+            /* System.out.println("###### UN AÑO Y UN MES ANTES:  " + cal.getTime()); */
+            
+            
+        } else {
+            cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - 2);
+            cal.set(Calendar.DAY_OF_MONTH, dia); 
+            /* System.out.println("###### UN MES ANTES:  " + cal.getTime()); */
+        }
+        return cal;
     }
+
 
 
 
