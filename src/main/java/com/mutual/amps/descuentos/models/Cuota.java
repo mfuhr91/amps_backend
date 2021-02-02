@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -44,12 +45,14 @@ public class Cuota implements Serializable {
     
     private Double montoCuota;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy UTC-3")
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    /* @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy UTC-3") */
     private Date fechaCuota;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descuento_id")
     @JsonIgnore
     private Descuento descuento;

@@ -14,4 +14,6 @@ public interface IItemRepo extends JpaRepository<Item, Long> {
     
 
     public List<Item> findAllByDescuento(Descuento descuento);
+
+    
 }

@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.socios.models.Socio;
@@ -40,10 +41,12 @@ public class Descuento implements Serializable{
     private String descripcion;
     
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy UTC-3")
+    @JsonFormat(timezone = "GMT-03:00")
+    @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy")
     private Date fechaAlta;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date ultimaCuota;
 

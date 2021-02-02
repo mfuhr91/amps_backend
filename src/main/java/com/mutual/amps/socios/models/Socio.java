@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mutual.amps.descuentos.models.Descuento;
@@ -64,10 +65,12 @@ public class Socio implements Serializable {
     private Boolean extranjero;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaIngresoLaboral;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaNacimiento;
 
@@ -76,16 +79,23 @@ public class Socio implements Serializable {
     @JoinColumn(name = "variable_id")
     private Variable cuotaSocial;
 
+    private Double seguroVida;
+
+    private Double cuotaDeporte;
+
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAlta;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 
@@ -131,7 +141,7 @@ public class Socio implements Serializable {
 
   
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 

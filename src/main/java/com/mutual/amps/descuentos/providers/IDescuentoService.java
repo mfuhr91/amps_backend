@@ -43,9 +43,13 @@ public interface IDescuentoService {
 
     public void guardarCuotaSocial();
 
-    public void crearDescuentoCuotaSocial(Socio socio);
+    public void crearDescuentos(Socio socio);
 
     @Transactional(readOnly = true)
     public Double sumarTotalRecaudado();
     
+    @Transactional(readOnly = true)
+    public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion );
+    
+
 }

@@ -10,6 +10,7 @@ import com.mutual.amps.socios.models.Tipo;
 import com.mutual.amps.socios.models.TipoDocumento;
 import com.mutual.amps.socios.providers.ISocioService;
 
+import com.mutual.amps.descuentos.providers.IDescuentoService;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,10 @@ public class SocioController {
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    
+    @Autowired
+    private IDescuentoService descuentosService;
 
     @GetMapping()
     public ResponseEntity<List<Socio>> listar() {
@@ -95,8 +100,8 @@ public class SocioController {
         socio.setUsuario(socio.getUsuario());
         
         this.socioService.guardar(socio);
-        
-        
+
+        this.descuentosService.crearDescuentos(socio);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(socio);
         
@@ -122,6 +127,8 @@ public class SocioController {
         socio.setUsuario(socio.getUsuario());
         
         this.socioService.guardar(socio);
+
+        this.descuentosService.crearDescuentos(socio);
         
         return ResponseEntity.status(HttpStatus.OK).body(socio);
         
