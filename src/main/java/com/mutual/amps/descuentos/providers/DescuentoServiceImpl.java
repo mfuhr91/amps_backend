@@ -1,6 +1,7 @@
 package com.mutual.amps.descuentos.providers;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -154,18 +155,21 @@ public class DescuentoServiceImpl implements IDescuentoService {
 
     private List<Item> fraccionarDescuento(Double valorDescuento, List<Item> items) {
 
+        DecimalFormat df = new DecimalFormat("#.00");
+
         Variable comision = this.variableService.buscarPorId(2);
         Variable valorItem = this.variableService.buscarPorId(3);
 
         Double porcentaje = (comision.getValor() / 100) + 1;
 
         if (valorDescuento > 5000.00) {
-            int nroItems = (int) Math.floor(valorDescuento / valorItem.getValor());
+            int nroItems = (int) Math.floor(valorDescuento / Double.parseDouble(df.format(valorItem.getValor())));
 
-            Double restante = valorDescuento - (nroItems * valorItem.getValor());
+            Double restante = valorDescuento - (nroItems * Double.parseDouble(df.format(valorItem.getValor())));
 
             for (int i = 0; i < nroItems; i++) {
-                Item nuevoItem = new Item(valorItem.getValor(), valorItem.getValor() * porcentaje);
+                Item nuevoItem = new Item(  Double.parseDouble(df.format(valorItem.getValor())), 
+                                            Double.parseDouble(df.format(valorItem.getValor())) * porcentaje);
 
                 items.add(nuevoItem);
 
@@ -233,6 +237,7 @@ public class DescuentoServiceImpl implements IDescuentoService {
     @Override
     public void crearDescuentos(Socio socio) {
 
+        DecimalFormat df = new DecimalFormat("#.00");
         
         Date fechaHoy = new Date();
 
@@ -268,10 +273,8 @@ public class DescuentoServiceImpl implements IDescuentoService {
             cal2.set(Calendar.DAY_OF_MONTH, cal2.getActualMinimum(Calendar.DAY_OF_MONTH));
         }
 
-        /* System.out.println("###### SOCIO: " + socio.getId() + " - " + socio.getApellido() + ", " + socio.getNombre()); */
-        
+    
         Descuento descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Cuota social");
-        /* System.out.println(cal.getTime()); */
         
         
         if(descuentoBuscado == null){
@@ -282,34 +285,36 @@ public class DescuentoServiceImpl implements IDescuentoService {
             Cuota cuotaCuotaSocial = new Cuota();
             Item itemCuotaSocial = new Item();
     
-            this.crearUnDescuento("Cuota social", cuotaSocial.getValor(), socio, cal2, convenio, descuentoCuotaSocial, cuotaCuotaSocial, itemCuotaSocial);
+            this.crearUnDescuento("Cuota social", Double.parseDouble(df.format(cuotaSocial.getValor())), socio, cal2, convenio, descuentoCuotaSocial, cuotaCuotaSocial, itemCuotaSocial);
             
 
         }
 
         descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Cuota deportiva");
+        Double cuotaGenerica;
         if(descuentoBuscado == null){
             if(socio.getCuotaDeporte() != null){
+                cuotaGenerica = Double.parseDouble(df.format(socio.getCuotaDeporte()));
                 Descuento descuentoDeporte = new Descuento();
                 Cuota cuotaDeporte = new Cuota();
                 Item itemDeporte = new Item();
-                this.crearUnDescuento("Cuota deportiva", socio.getCuotaDeporte(), socio, cal2, convenio, descuentoDeporte, cuotaDeporte, itemDeporte);
+                this.crearUnDescuento("Cuota deportiva", cuotaGenerica, socio, cal2, convenio, descuentoDeporte, cuotaDeporte, itemDeporte);
             }
         } else {
-        
+            cuotaGenerica = Double.parseDouble(df.format(socio.getCuotaDeporte()));
             Cuota cuota = descuentoBuscado.getCuotas().get(0);
-            cuota.setMontoCuota(socio.getCuotaDeporte());
+            cuota.setMontoCuota(cuotaGenerica);
             
             this.cuotaRepo.save(cuota);
 
             Item item = descuentoBuscado.getItems().get(0);
-            item.setValorSubTotal(socio.getCuotaDeporte());
-            item.setValorTotal(socio.getCuotaDeporte());
+            item.setValorSubTotal(cuotaGenerica);
+            item.setValorTotal(cuotaGenerica);
 
             this.itemRepo.save(item);
 
-            descuentoBuscado.setValorCuota(socio.getCuotaDeporte());
-            descuentoBuscado.setValorTotal(socio.getCuotaDeporte());
+            descuentoBuscado.setValorCuota(cuotaGenerica);
+            descuentoBuscado.setValorTotal(cuotaGenerica);
 
             this.descuentoRepo.save(descuentoBuscado);
 
@@ -319,28 +324,28 @@ public class DescuentoServiceImpl implements IDescuentoService {
         descuentoBuscado = this.buscarDescuentoPorSocioPorFechaAltaPorDescripcion(socio.getId(), cal.getTime() , "Seguro vida flia");
         if(descuentoBuscado == null){
             if(socio.getSeguroVida() != null){
-
+                cuotaGenerica = Double.parseDouble(df.format(socio.getSeguroVida()));
                 Descuento descuentoSeguro = new Descuento();
                 Cuota cuotaSeguro = new Cuota();
                 Item itemSeguro = new Item();
-                this.crearUnDescuento("Seguro vida flia", socio.getSeguroVida(), socio, cal2, convenio, descuentoSeguro, cuotaSeguro, itemSeguro);
+                this.crearUnDescuento("Seguro vida flia", cuotaGenerica, socio, cal2, convenio, descuentoSeguro, cuotaSeguro, itemSeguro);
                 
             }
         } else {
-
+            cuotaGenerica = Double.parseDouble(df.format(socio.getSeguroVida()));
             Cuota cuota = descuentoBuscado.getCuotas().get(0);
-            cuota.setMontoCuota(socio.getSeguroVida());
+            cuota.setMontoCuota(cuotaGenerica);
             
             this.cuotaRepo.save(cuota);
 
             Item item = descuentoBuscado.getItems().get(0);
-            item.setValorSubTotal(socio.getSeguroVida());
-            item.setValorTotal(socio.getSeguroVida());
+            item.setValorSubTotal(cuotaGenerica);
+            item.setValorTotal(cuotaGenerica);
 
             this.itemRepo.save(item);
             
-            descuentoBuscado.setValorCuota(socio.getSeguroVida());
-            descuentoBuscado.setValorTotal(socio.getSeguroVida());
+            descuentoBuscado.setValorCuota(cuotaGenerica);
+            descuentoBuscado.setValorTotal(cuotaGenerica);
 
             this.descuentoRepo.save(descuentoBuscado);
         }
