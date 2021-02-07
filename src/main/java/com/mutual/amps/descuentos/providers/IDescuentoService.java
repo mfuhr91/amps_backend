@@ -50,6 +50,6 @@ public interface IDescuentoService {
     
     @Transactional(readOnly = true)
     public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion );
-    
+
 
 }
