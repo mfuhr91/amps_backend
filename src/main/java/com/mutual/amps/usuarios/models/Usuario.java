@@ -35,6 +35,8 @@ public class Usuario implements Serializable{
 
     private String nombreUsuario;
 
+    private Boolean baja;
+
 
     private String contrasena;
 
@@ -50,13 +52,14 @@ public class Usuario implements Serializable{
     private Date fechaBaja;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authority_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "rol_id")
     private Rol rol;
 
 
     public Usuario(){
         this.fechaAlta = new Date();
+        this.baja = false;
     }
     
 }

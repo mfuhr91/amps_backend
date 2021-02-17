@@ -76,5 +76,10 @@ public class SocioServiceImpl implements ISocioService {
         return this.socioRepo.contarSocios();
     }
 
+    @Override
+    public Socio buscarPorDoc(Long doc) {
+       return this.socioRepo.findByNumDoc(doc);
+    }
+
     
 }

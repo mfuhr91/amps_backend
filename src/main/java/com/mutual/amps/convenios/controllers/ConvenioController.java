@@ -7,6 +7,7 @@ import com.mutual.amps.categorias.providers.ICategoriaService;
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.providers.IConvenioService;
 import com.mutual.amps.fotos.providers.IFotoService;
+import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,14 @@ public class ConvenioController {
     public ResponseEntity<List<Convenio>> buscar(@PathVariable String param) {
         
         return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.buscar(param));
+    }
+
+    @GetMapping("buscarPorUsuario/{nombreUsuario}")
+    public ResponseEntity<Convenio> buscarPorUsuario(@PathVariable String nombreUsuario) {
+
+        Usuario usuario = this.usuarioService.buscarPorNombreUsuario(nombreUsuario).get(0);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.buscarPorUsuario(usuario));
     }
 
     @GetMapping("contar")

@@ -25,6 +25,10 @@ logging:
         org:
             hibernate:
                 SQL: debug 
+                
+jwt:
+    secret: secret
+    expiration: 36000
 
 server: #IMPORTANTE PARA PODER CONECTARSE DESDE HEROKU
     port: ${PORT}
