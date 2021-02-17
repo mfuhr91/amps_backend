@@ -136,6 +136,8 @@ public class Socio implements Serializable {
 
     private Boolean baja;
 
+    private Boolean habilitado;
+
     /* @NotBlank */
     private Long telefono;
 
