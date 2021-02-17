@@ -23,7 +23,8 @@ public class AmpsApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 	
-	String password = "030512";
+	
+		/* String password = "password";
 
 
 		for(int i = 0; i < 1; i++){
@@ -32,7 +33,7 @@ public class AmpsApplication implements CommandLineRunner {
 			
 			System.out.println("#################################################:     ->  " + bcryptPassword);
 			
-		} 
+		}  */
 
 	}
 	
