@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.convenios.models.Convenio;
+import com.mutual.amps.usuarios.models.Usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,8 @@ public interface IConvenioRepo extends JpaRepository<Convenio, Integer>{
     public Integer contarConvenios();
 
     public List<Convenio> findByCategoria(Categoria categoria);
+
+    public Convenio findByUsuario(Usuario usuario);
 
 
 }

@@ -61,10 +61,13 @@ public class ExportarDescuentosImpl implements IExportarDescuentos {
                         
                         String importe = df.format(item.getValorTotal()).replace(".", "");
                         if(importe.length() < 13) {
-                            System.out.println(importe);
-                            
                             importe = "0".repeat(13 - importe.length()).concat(importe);
-                            System.out.println(importe);
+                        }
+                        if(numDoc.length() < 8){
+                            numDoc = "0".repeat(8 - numDoc.length()).concat(numDoc);
+                        }
+                        if(numCuenta.length() < 9){
+                            numCuenta = "0".repeat(9 - numCuenta.length()).concat(numCuenta);
                         }
                         
                     

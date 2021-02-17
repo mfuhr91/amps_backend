@@ -1,11 +1,14 @@
 package com.mutual.amps.usuarios.controllers;
 
+
 import java.util.List;
 
 import com.mutual.amps.usuarios.models.Rol;
 import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.providers.IRolService;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +59,15 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.buscar(param));
     }
 
+    @GetMapping("buscarPorNombreUsuario/{usuario}")
+    public ResponseEntity<List<Usuario>> buscarPorNombreUsuario(@PathVariable String usuario) {
+        
+        return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.buscarPorNombreUsuario(usuario));
+    }
+
     @GetMapping("editar/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
+        
 
         return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.buscarPorId(id));
     }
@@ -84,12 +94,18 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Usuario> eliminar(@PathVariable Integer id) {
-        this.usuarioService.eliminar(id);
-        
-        Usuario usuario = new Usuario();
-        
-        return ResponseEntity.status(HttpStatus.OK).body(usuario);
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+
+        try{
+            this.usuarioService.eliminar(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Usuario());
+
+        } catch(Exception e) {
+    
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("500_INTERNAL_SERVER_ERROR");
+        }
     }
+
+
     
 }

@@ -20,5 +20,8 @@ public interface IUsuarioService {
 
     @Transactional(readOnly = true)
     public List<Usuario> buscar(String param);
+
+    @Transactional(readOnly = true)
+    public List<Usuario> buscarPorNombreUsuario(String nombreUsuario);
     
 }

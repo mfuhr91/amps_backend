@@ -18,4 +18,6 @@ public interface ISocioRepo extends JpaRepository<Socio, Integer> {
     @Query(value = "SELECT COUNT(*) FROM socios", nativeQuery = true)
     public Integer contarSocios();
 
+    public Socio findByNumDoc(Long numDoc);
+
 }

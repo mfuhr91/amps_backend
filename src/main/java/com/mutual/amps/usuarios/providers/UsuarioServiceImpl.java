@@ -6,10 +6,14 @@ import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.models.repo.IUsuarioRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private IUsuarioRepo usuarioRepo;
@@ -27,6 +31,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public void guardar(Usuario usuario) {
+        
+        usuario.setContrasena(this.passwordEncoder.encode(usuario.getContrasena()));
+        
+
         this.usuarioRepo.save(usuario);
 
     }
@@ -39,5 +47,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public List<Usuario> buscar(String param) {
       return this.usuarioRepo.findByParam(param);
+    }
+
+    @Override
+    public List<Usuario> buscarPorNombreUsuario(String nombreUsuario) {
+        return usuarioRepo.findByNombreUsuario(nombreUsuario);
     }
 }

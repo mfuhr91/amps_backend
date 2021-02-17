@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "authorities")
+@Table(name = "roles")
 @Data
 @NoArgsConstructor
 
@@ -25,7 +25,7 @@ public class Rol implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String authority;
+    private String nombreRol;
     
 }
 

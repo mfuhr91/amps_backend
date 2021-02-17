@@ -67,6 +67,16 @@ public class SocioController {
         
         return ResponseEntity.status(HttpStatus.OK).body(this.socioService.buscar(param));
     }
+    @GetMapping("buscarPorDoc/{param}")
+    public ResponseEntity<Socio> buscarPorDoc(@PathVariable String param) {
+        System.out.println(param);
+        
+        Long numero = Long.parseLong(param);
+
+        System.out.println(numero);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(this.socioService.buscarPorDoc(numero));
+    }
     
     @GetMapping("estados_civiles")
     public ResponseEntity<List<EstadoCivil>> listarEstadosCiviles() {

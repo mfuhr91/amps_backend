@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.convenios.models.Convenio;
+import com.mutual.amps.usuarios.models.Usuario;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +30,6 @@ public interface IConvenioService {
     public List<Convenio> buscarPorCategoria(Categoria categoria);
 
 
-    
+     @Transactional(readOnly = true)
+     public Convenio buscarPorUsuario(Usuario usuario);
 }
