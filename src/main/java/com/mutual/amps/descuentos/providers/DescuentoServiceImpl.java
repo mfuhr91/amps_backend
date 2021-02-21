@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-g
 
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.providers.IConvenioService;
