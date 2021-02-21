@@ -77,7 +77,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
+                registry.addMapping("**")
                         .allowedOrigins("https://amps-front-test.herokuapp.com")
                         /* .allowedOrigins("http://localhost:4200")  */
 		                .allowedMethods("PUT", "DELETE","POST","GET");
