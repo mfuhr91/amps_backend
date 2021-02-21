@@ -78,6 +78,12 @@ public class DescuentoServiceImpl implements IDescuentoService {
 
     @Override
     public void guardar(Descuento descuento) {
+
+        Double comision = this.variableService.buscarPorId(2).getValor() / 100 + 1;
+
+        descuento.setValorCuota((descuento.getValorSubTotal() / descuento.getNumCuotas()) * comision);
+        descuento.setValorTotal(descuento.getValorSubTotal() * comision);
+
         this.descuentoRepo.save(descuento);
 
     }
@@ -87,11 +93,18 @@ public class DescuentoServiceImpl implements IDescuentoService {
         this.descuentoRepo.deleteById(id);
     }
 
+    // CUOTAS
+
+    @Override
+    public List<Cuota> listarCuotasPorDescuento(Descuento descuento) {
+        return this.cuotaRepo.findByDescuento(descuento);
+    }
+
     // ITEMS
 
     @Override
     public List<Item> listarItemsPorDescuento(Descuento descuento) {
-        return this.itemRepo.findAllByDescuento(descuento);
+        return this.itemRepo.findByDescuento(descuento);
     }
 
     @Override
@@ -102,11 +115,45 @@ public class DescuentoServiceImpl implements IDescuentoService {
     @Override
     public void guardarItems(Descuento descuento) {
 
+        
+        if(descuento.getId() != null){
+            Descuento descuentoEncontrado = this.descuentoRepo.findById(descuento.getId()).orElse(null);
+            if( descuentoEncontrado.getValorSubTotal() != descuento.getValorSubTotal() || 
+                descuentoEncontrado.getCuotas().size() != descuento.getCuotas().size()){
+
+                List<Cuota> cuotasBuscadas = descuento.getCuotas();
+                List<Item> itemsBuscados = descuento.getItems();
+        
+                
+                
+                cuotasBuscadas.forEach(cuotaEncontrada -> {
+                    this.cuotaRepo.deleteById(cuotaEncontrada.getId());
+                    
+                });
+                
+                itemsBuscados.forEach(itemEncontrado -> {
+                    this.itemRepo.deleteById(itemEncontrado.getId());
+                });
+                
+                descuento.setCuotas(null);
+                descuento.setItems(null);
+
+            }
+            
+        }
+
+        this.guardar(descuento);
+       
+        DecimalFormat df = new DecimalFormat("#.00");
+        
+
         List<Item> items = new ArrayList<Item>();
         List<Cuota> cuotas = new ArrayList<Cuota>();
         Cuota cuota;
 
         Double montoCuota = descuento.getValorTotal() / descuento.getNumCuotas();
+
+        montoCuota = Double.parseDouble(df.format(montoCuota));
         for (int i = 1; i <= descuento.getNumCuotas(); i++) {
 
             Calendar cal = Calendar.getInstance();
@@ -127,6 +174,8 @@ public class DescuentoServiceImpl implements IDescuentoService {
                 descuento.setUltimaCuota(cal.getTime());
 
             }
+
+            this.descuentoRepo.save(descuento);
     
             
             cuota = new Cuota(montoCuota, i, cal.getTime());
@@ -134,17 +183,19 @@ public class DescuentoServiceImpl implements IDescuentoService {
             cuota.setDescuento(descuento);
             this.cuotaRepo.save(cuota);
 
+
         }
 
+        items = fraccionarDescuento(montoCuota);
 
 
-        items = fraccionarDescuento(montoCuota, items);
-
-
-        for (Item itemLista : items) {
-            itemLista.setDescuento(descuento);
-            this.itemRepo.save(itemLista);
+        for (Item item : items) {
+            item.setDescuento(descuento);
+            this.itemRepo.save(item);
         }
+
+       
+        
 
     }
 
@@ -153,35 +204,35 @@ public class DescuentoServiceImpl implements IDescuentoService {
         this.itemRepo.deleteById(id);
     }
 
-    private List<Item> fraccionarDescuento(Double valorDescuento, List<Item> items) {
+    private List<Item> fraccionarDescuento(Double montoCuota) {
+
+        List<Item> items = new ArrayList<Item>();
 
         DecimalFormat df = new DecimalFormat("#.00");
 
-        Variable comision = this.variableService.buscarPorId(2);
-        Variable valorItem = this.variableService.buscarPorId(3);
+        Double valorItem = this.variableService.buscarPorId(3).getValor();
 
-        Double porcentaje = (comision.getValor() / 100) + 1;
+        valorItem = Double.parseDouble(df.format(valorItem));
 
-        if (valorDescuento > 5000.00) {
-            int nroItems = (int) Math.floor(valorDescuento / Double.parseDouble(df.format(valorItem.getValor())));
+        if (montoCuota> 5000.00) {
+            int nroItems = (int) Math.floor(montoCuota / valorItem);
 
-            Double restante = valorDescuento - (nroItems * Double.parseDouble(df.format(valorItem.getValor())));
+            Double restante = montoCuota - (nroItems * valorItem);
 
             for (int i = 0; i < nroItems; i++) {
-                Item nuevoItem = new Item(  Double.parseDouble(df.format(valorItem.getValor())), 
-                                            Double.parseDouble(df.format(valorItem.getValor())) * porcentaje);
+                Item nuevoItem = new Item(valorItem);
 
                 items.add(nuevoItem);
 
             }
 
             if (restante != 0) {
-                Item itemRestante = new Item(restante, restante * porcentaje);
+                Item itemRestante = new Item(restante);
                 items.add(itemRestante);
             }
 
         } else {
-            Item unicoItem = new Item(valorDescuento, valorDescuento * porcentaje);
+            Item unicoItem = new Item(montoCuota);
             items.add(unicoItem);
 
         }
@@ -214,10 +265,10 @@ public class DescuentoServiceImpl implements IDescuentoService {
 
         List<Socio> socios = this.socioService.listarTodo();
         
-        Variable variableDiaCierre = this.variableService.buscarPorId(4);
+        /* Variable variableDiaCierre = ; */
         
         // FECHA DE CIERRE FORMATO: Fri Jan 20 09:59:30 ART 2021
-        Integer diaCierre = (int) Math.round(variableDiaCierre.getValor());
+        Integer diaCierre = (int) Math.round(this.variableService.buscarPorId(4).getValor());
         
         Calendar cal = Calendar.getInstance();
         /* cal.set(Calendar.MONTH, 3); */ // TODO: BORRAR
@@ -303,13 +354,12 @@ public class DescuentoServiceImpl implements IDescuentoService {
         } else {
             cuotaGenerica = Double.parseDouble(df.format(socio.getCuotaDeporte()));
             Cuota cuota = descuentoBuscado.getCuotas().get(0);
-            cuota.setMontoCuota(cuotaGenerica);
+            cuota.setValor(cuotaGenerica);
             
             this.cuotaRepo.save(cuota);
 
             Item item = descuentoBuscado.getItems().get(0);
-            item.setValorSubTotal(cuotaGenerica);
-            item.setValorTotal(cuotaGenerica);
+            item.setValor(cuotaGenerica);
 
             this.itemRepo.save(item);
 
@@ -334,13 +384,12 @@ public class DescuentoServiceImpl implements IDescuentoService {
         } else {
             cuotaGenerica = Double.parseDouble(df.format(socio.getSeguroVida()));
             Cuota cuota = descuentoBuscado.getCuotas().get(0);
-            cuota.setMontoCuota(cuotaGenerica);
+            cuota.setValor(cuotaGenerica);
             
             this.cuotaRepo.save(cuota);
 
             Item item = descuentoBuscado.getItems().get(0);
-            item.setValorSubTotal(cuotaGenerica);
-            item.setValorTotal(cuotaGenerica);
+            item.setValor(cuotaGenerica);
 
             this.itemRepo.save(item);
             
@@ -352,11 +401,10 @@ public class DescuentoServiceImpl implements IDescuentoService {
     }
 
     private void crearUnDescuento(String descripcion, Double montoDescuento, Socio socio, Calendar cal, Convenio convenio, Descuento descuento, Cuota cuota, Item item){
-
-       /*  System.out.println(montoDescuento); */
         
         descuento.setDescripcion(descripcion);
         descuento.setValorCuota(montoDescuento);
+        descuento.setValorSubTotal(montoDescuento);
         descuento.setValorTotal(montoDescuento);
         descuento.setSocio(socio);
         descuento.setNumCuotas(1);
@@ -366,13 +414,12 @@ public class DescuentoServiceImpl implements IDescuentoService {
         this.descuentoRepo.save(descuento);
        
          
-        item.setValorSubTotal(montoDescuento);
-        item.setValorTotal(montoDescuento);
+        item.setValor(montoDescuento);
         item.setDescuento(descuento);
         this.itemRepo.save(item);
 
-        cuota.setFechaCuota(cal.getTime());
-        cuota.setMontoCuota(montoDescuento);
+        cuota.setFecha(cal.getTime());
+        cuota.setValor(montoDescuento);
         cuota.setNumCuota(1);
         
         cuota.setDescuento(descuento);
@@ -412,6 +459,8 @@ public class DescuentoServiceImpl implements IDescuentoService {
         }
         return cal;
     }
+
+    
 
 
 

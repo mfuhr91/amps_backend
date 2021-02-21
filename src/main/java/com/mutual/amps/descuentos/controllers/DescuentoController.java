@@ -1,30 +1,21 @@
 package com.mutual.amps.descuentos.controllers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mutual.amps.descuentos.models.Descuento;
 
 import com.mutual.amps.descuentos.providers.IDescuentoService;
 import com.mutual.amps.descuentos.providers.IExportarDescuentos;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -71,7 +62,8 @@ public class DescuentoController {
     @PostMapping("crear")
     public ResponseEntity<Descuento> agregar(@RequestBody Descuento descuento) {
 
-        this.descuentoService.guardar(descuento);
+
+        // EL DESCUENTO SE GUARDA DENTRO DEL METODO guardarItems();
 
         this.descuentoService.guardarItems(descuento);
 
@@ -81,7 +73,7 @@ public class DescuentoController {
     @PutMapping("editar")
     public ResponseEntity<Descuento> editar(@RequestBody Descuento descuento) {
 
-        this.descuentoService.guardar(descuento);
+        // EL DESCUENTO SE GUARDA DENTRO DEL METODO guardarItems();
 
         this.descuentoService.guardarItems(descuento);
 

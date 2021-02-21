@@ -43,13 +43,13 @@ public class Cuota implements Serializable {
     private Integer numCuota;
 
     
-    private Double montoCuota;
+    private Double valor;
     
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     /* @DateTimeFormat(pattern = "HH:mm dd/MM/yyyy UTC-3") */
-    private Date fechaCuota;
+    private Date fecha;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,10 +58,10 @@ public class Cuota implements Serializable {
     private Descuento descuento;
     
 
-    public Cuota(Double montoCuota, Integer numCuota, Date fechaCuota) {
-        this.montoCuota = montoCuota;
+    public Cuota(Double valor, Integer numCuota, Date fecha) {
+        this.valor = valor;
         this.numCuota = numCuota;
-        this.fechaCuota = fechaCuota;
+        this.fecha = fecha;
     }
     
 }

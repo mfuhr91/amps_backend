@@ -54,6 +54,8 @@ public class Descuento implements Serializable{
 
     private Double valorCuota;
 
+    private Double valorSubTotal;
+
     private Double valorTotal;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

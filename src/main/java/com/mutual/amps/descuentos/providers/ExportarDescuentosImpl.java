@@ -59,7 +59,7 @@ public class ExportarDescuentosImpl implements IExportarDescuentos {
                         String numCuenta = descuento.getSocio().getNumCuenta().toString();
                         
                         
-                        String importe = df.format(item.getValorTotal()).replace(".", "");
+                        String importe = df.format(item.getValor()).replace(".", "");
                         if(importe.length() < 13) {
                             importe = "0".repeat(13 - importe.length()).concat(importe);
                         }
