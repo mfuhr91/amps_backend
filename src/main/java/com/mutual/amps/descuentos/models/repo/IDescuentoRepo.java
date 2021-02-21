@@ -22,7 +22,7 @@ public interface IDescuentoRepo extends JpaRepository<Descuento, Long>{
 
     public List<Descuento> findByConvenio(Convenio convenio);
 
-    @Query(value = "SELECT * FROM descuentos AS d join cuotas AS c WHERE fecha_cuota LIKE %:param% AND d.id = c.descuento_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM descuentos AS d join cuotas AS c WHERE fecha LIKE %:param% AND d.id = c.descuento_id", nativeQuery = true)
     public List<Descuento> getDescuentosByFechaCuota(@Param("param") String param);
 
     public List<Descuento> findByDescripcion(String descripcion);

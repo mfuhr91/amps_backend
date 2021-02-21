@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.mutual.amps.convenios.models.Convenio;
+import com.mutual.amps.descuentos.models.Cuota;
 import com.mutual.amps.descuentos.models.Descuento;
 import com.mutual.amps.descuentos.models.Item;
 import com.mutual.amps.socios.models.Socio;
@@ -51,5 +52,7 @@ public interface IDescuentoService {
     @Transactional(readOnly = true)
     public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion );
 
+    @Transactional(readOnly = true)
+    public List<Cuota> listarCuotasPorDescuento(Descuento descuento);
 
 }

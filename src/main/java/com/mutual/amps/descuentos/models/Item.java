@@ -30,9 +30,7 @@ public class Item implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)     
     private Long id;
 
-    private Double valorSubTotal;
-
-    private Double valorTotal;
+    private Double valor;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,8 +38,7 @@ public class Item implements Serializable{
     @JsonIgnore
     private Descuento descuento;
 
-    public Item(Double valorSubTotal, Double valorTotal){
-        this.valorSubTotal = valorSubTotal;
-        this.valorTotal = valorTotal;
+    public Item(Double valor){
+        this.valor = valor;
     };
 }

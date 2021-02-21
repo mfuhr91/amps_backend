@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface IItemRepo extends JpaRepository<Item, Long> {
     
 
-    public List<Item> findAllByDescuento(Descuento descuento);
+    public List<Item> findByDescuento(Descuento descuento);
 
     
 }
