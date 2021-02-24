@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Tipo implements Serializable{
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
     private String nombre;
     
 }

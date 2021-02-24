@@ -1,15 +1,10 @@
 package com.mutual.amps.descuentos.providers;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.providers.IConvenioService;
@@ -20,19 +15,15 @@ import com.mutual.amps.descuentos.models.repo.ICuotaRepo;
 import com.mutual.amps.descuentos.models.repo.IDescuentoRepo;
 import com.mutual.amps.descuentos.models.repo.IItemRepo;
 import com.mutual.amps.socios.models.Socio;
-import com.mutual.amps.socios.models.repo.ISocioRepo;
 import com.mutual.amps.socios.providers.ISocioService;
 import com.mutual.amps.variables.models.Variable;
-import com.mutual.amps.variables.models.repo.IVariableRepo;
 import com.mutual.amps.variables.providers.IVariableService;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javassist.runtime.Desc;
 
 @Service
 @EnableScheduling

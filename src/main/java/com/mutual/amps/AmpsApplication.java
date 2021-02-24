@@ -1,18 +1,15 @@
 package com.mutual.amps;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 @SpringBootApplication
 public class AmpsApplication implements CommandLineRunner {
 
-	/* Solo modo desarrollo */
+	/* Solo modo desarrollo 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder; */
 	
 
 	public static void main(String[] args) {

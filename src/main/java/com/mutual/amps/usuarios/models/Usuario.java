@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,14 +35,17 @@ public class Usuario implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
     private String nombreUsuario;
 
+    @NotNull
     private Boolean baja;
 
-
+    @NotBlank
     private String contrasena;
 
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -51,6 +56,7 @@ public class Usuario implements Serializable{
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id")

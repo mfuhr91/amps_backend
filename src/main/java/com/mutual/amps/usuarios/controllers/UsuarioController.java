@@ -1,18 +1,20 @@
 package com.mutual.amps.usuarios.controllers;
 
-
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.mutual.amps.usuarios.models.Rol;
 import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.providers.IRolService;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,8 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    //ROLES
+
     @GetMapping("roles")
     public ResponseEntity<List<Rol>> listarRoles() {
 
@@ -53,6 +57,9 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.listarTodo());
     }
 
+
+    // USUARIOS
+
     @GetMapping("buscar/{param}")
     public ResponseEntity<List<Usuario>> buscar(@PathVariable String param) {
         
@@ -67,13 +74,32 @@ public class UsuarioController {
 
     @GetMapping("editar/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
-        
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.buscarPorId(id));
+        if(id == 1){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(this.usuarioService.buscarPorId(id));
+
+        }
+        
+        
     }
     
     @PostMapping("crear")
-    public ResponseEntity<Usuario> agregar(@RequestBody Usuario usuario){
+    public ResponseEntity<?> agregar(@Valid @RequestBody Usuario usuario, BindingResult result){
+        
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
+
         
         this.usuarioService.guardar(usuario);
         
@@ -84,26 +110,50 @@ public class UsuarioController {
 
 
     @PutMapping("editar")
-    public ResponseEntity<Usuario> editar(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Usuario usuario, BindingResult result) {
+
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
+        if(usuario.getId() == 1){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+
+            this.usuarioService.guardar(usuario);
+            
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+
+        }
+
         
-        
-        this.usuarioService.guardar(usuario);
-        
-        return ResponseEntity.status(HttpStatus.OK).body(usuario);
         
     }
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Integer id) {
 
-        try{
-            this.usuarioService.eliminar(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new Usuario());
+        if( id == 1){
 
-        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else{
+
+            try{
+                this.usuarioService.eliminar(id);
+                return ResponseEntity.status(HttpStatus.OK).body(new Usuario());
     
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("500_INTERNAL_SERVER_ERROR");
+            } catch(Exception e) {
+        
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("500_INTERNAL_SERVER_ERROR");
+            }
+
         }
+
     }
 
 

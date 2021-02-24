@@ -30,13 +30,12 @@ public class CloudinaryService {
     public Map upload(MultipartFile multipartFile, String tipo) throws IOException {
 
         File file = convert(multipartFile);
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
         Map result;
         
         if(tipo.contains("socio")){    
-            result = cloudinary.uploader().unsignedUpload(file, "amps_socios", ObjectUtils.asMap( "public_id", String.valueOf( sdf.format( new Date() ) ) ) );     
+            result = cloudinary.uploader().unsignedUpload(file, "amps_socios", ObjectUtils.asMap( "public_id", String.valueOf(new Date().getTime()) ));     
         } else {    
-            result = cloudinary.uploader().unsignedUpload(file, "amps_comercios" , ObjectUtils.asMap( "public_id", String.valueOf( sdf.format( new Date() ) ) ) );  
+            result = cloudinary.uploader().unsignedUpload(file, "amps_comercios" , ObjectUtils.asMap( "public_id", String.valueOf(new Date().getTime()) ));  
         }                                                                       
                                       
         file.delete();

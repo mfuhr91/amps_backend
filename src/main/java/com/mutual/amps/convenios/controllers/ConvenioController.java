@@ -1,6 +1,9 @@
 package com.mutual.amps.convenios.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.categorias.providers.ICategoriaService;
@@ -11,8 +14,10 @@ import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,14 +54,22 @@ public class ConvenioController {
     @GetMapping("editar/{id}")
     public ResponseEntity<Convenio> buscarPorId(@PathVariable Integer id) {
 
-        System.out.println("Convenio encontrado");
-
         return ResponseEntity.status(HttpStatus.OK).body(convenioService.buscarPorId(id));
+
     }
 
     @PostMapping("crear")
-    public ResponseEntity<Convenio> agregar(@RequestBody Convenio convenio) {
+    public ResponseEntity<?> agregar(@Valid @RequestBody Convenio convenio, BindingResult result) {
  
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
+
         if(convenio.getFoto().getUrl() != "") {
 
             fotoService.guardarFoto(convenio.getFoto());
@@ -77,9 +90,16 @@ public class ConvenioController {
     }
 
     @PutMapping("editar")
-    public ResponseEntity<Convenio> editar(@RequestBody Convenio convenio) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Convenio convenio, BindingResult result) {
 
-        System.out.println(convenio);
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
         
         if(convenio.getFoto().getUrl() != "") {
 
@@ -102,15 +122,25 @@ public class ConvenioController {
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Convenio> eliminar(@PathVariable Integer id) {
-        this.convenioService.eliminar(id);
 
-        Convenio convenio = new Convenio();
+        if(id == 1){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }else {
 
-        return ResponseEntity.status(HttpStatus.OK).body(convenio);
+            this.convenioService.eliminar(id);
+
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        }
+
+
+        
     }
 
     @GetMapping("buscar/{param}")
     public ResponseEntity<List<Convenio>> buscar(@PathVariable String param) {
+
+        
         
         return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.buscar(param));
     }

@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.mutual.amps.descuentos.models.Descuento;
 
@@ -14,12 +17,14 @@ import com.mutual.amps.descuentos.providers.IDescuentoService;
 import com.mutual.amps.descuentos.providers.IExportarDescuentos;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.ByteArrayResource;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +65,16 @@ public class DescuentoController {
     }
 
     @PostMapping("crear")
-    public ResponseEntity<Descuento> agregar(@RequestBody Descuento descuento) {
+    public ResponseEntity<?> agregar(@Valid @RequestBody Descuento descuento, BindingResult result) {
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
 
 
         // EL DESCUENTO SE GUARDA DENTRO DEL METODO guardarItems();
@@ -71,7 +85,17 @@ public class DescuentoController {
     }
 
     @PutMapping("editar")
-    public ResponseEntity<Descuento> editar(@RequestBody Descuento descuento) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Descuento descuento, BindingResult result) {
+
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
 
         // EL DESCUENTO SE GUARDA DENTRO DEL METODO guardarItems();
 

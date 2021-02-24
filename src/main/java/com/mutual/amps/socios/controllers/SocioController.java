@@ -1,7 +1,10 @@
 package com.mutual.amps.socios.controllers;
 
-
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import com.mutual.amps.fotos.providers.IFotoService;
 import com.mutual.amps.socios.models.EstadoCivil;
@@ -14,9 +17,12 @@ import com.mutual.amps.descuentos.providers.IDescuentoService;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,8 +101,17 @@ public class SocioController {
     }
     
     @PostMapping("crear")
-    public ResponseEntity<Socio> agregar(@RequestBody Socio socio) {
+    public ResponseEntity<?> agregar(@Valid @RequestBody Socio socio, BindingResult result) {
         
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
+
         if(socio.getFoto().getUrl() != "") {
             
             this.fotoService.guardarFoto(socio.getFoto());
@@ -114,12 +129,25 @@ public class SocioController {
         this.descuentosService.crearDescuentos(socio);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(socio);
+            
+    
+
+    
         
     }
     
     @PutMapping("editar")
-    public ResponseEntity<Socio> editar(@RequestBody Socio socio) {
-        System.out.println(socio);
+    public ResponseEntity<?> editar(@Valid @RequestBody Socio socio, BindingResult result) {
+        
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
         
         if(socio.getFoto().getUrl() != "") {
             
@@ -148,9 +176,9 @@ public class SocioController {
     
     @GetMapping("/editar/{id}")
     public ResponseEntity<Socio> buscarPorId(@PathVariable Integer id) {
-        Socio socioBuscado = new Socio();
+      /*   Socio socioBuscado = new Socio(); */
         
-        socioBuscado = this.socioService.buscarPorId(id);
+        Socio socioBuscado = this.socioService.buscarPorId(id);
         
             
         return ResponseEntity.status(HttpStatus.OK).body(socioBuscado);

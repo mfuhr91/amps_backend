@@ -2,12 +2,10 @@ package com.mutual.amps.descuentos.models.repo;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.mutual.amps.convenios.models.Convenio;
-import com.mutual.amps.descuentos.models.Cuota;
+
 import com.mutual.amps.descuentos.models.Descuento;
-import com.mutual.amps.descuentos.models.Item;
 import com.mutual.amps.socios.models.Socio;
 
 import org.springframework.data.jpa.repository.JpaRepository;

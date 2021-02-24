@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,18 +46,25 @@ public class Convenio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
     private String nombre;
     
+    @NotBlank
     private String contacto;
 
+    @NotBlank
     private String direccion;
 
+    @NotNull
     private Long telefono;
 
+    @NotNull
     private Long cuit;
 
+    @NotNull
     private Boolean baja;
 
+    @NotBlank
     private String correo;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -68,6 +77,7 @@ public class Convenio implements Serializable {
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
