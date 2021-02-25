@@ -1,13 +1,18 @@
 package com.mutual.amps.categorias.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.categorias.providers.ICategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +37,17 @@ public class CategoriaController {
     }
 
     @PostMapping("crear")
-    public ResponseEntity<Categoria> agregar(@RequestBody Categoria categoria) {
-        System.out.println(categoria.toString());
+    public ResponseEntity<?> agregar(@Valid @RequestBody Categoria categoria, BindingResult result) {
+
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }
+
         this.categoriaService.guardar(categoria);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
@@ -41,10 +55,16 @@ public class CategoriaController {
     }
 
     @PutMapping("editar")
-    public ResponseEntity<Categoria> editar(@RequestBody Categoria categoria) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Categoria categoria, BindingResult result) {
 
-        System.out.println(categoria.toString());
-        
+        if(result.hasErrors()){
+            
+            List<String> errors = result.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        }        
 
         this.categoriaService.guardar(categoria);
 
@@ -57,7 +77,7 @@ public class CategoriaController {
         
         return ResponseEntity.status(HttpStatus.OK).body(this.categoriaService.buscar(param));
     }
-
+    
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Categoria> eliminar(@PathVariable Integer id) {
         this.categoriaService.eliminar(id);

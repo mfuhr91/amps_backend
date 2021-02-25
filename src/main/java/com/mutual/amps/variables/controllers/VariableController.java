@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
 @RequestMapping("/variables")
 public class VariableController {
@@ -32,25 +30,20 @@ public class VariableController {
         return ResponseEntity.status(HttpStatus.OK).body(variableService.listarTodo());
     }
 
-    @GetMapping("editar/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Variable> buscarPorId(@PathVariable Integer id) {
 
         return ResponseEntity.status(HttpStatus.OK).body(variableService.buscarPorId(id));
     }
-
-    @GetMapping("{id}")
-    public ResponseEntity<Variable> buscarVariable(@PathVariable Integer id) {
     
-        return ResponseEntity.status(HttpStatus.OK).body(this.variableService.buscarPorId(id));
-    }
-
-    @PutMapping("editar")
+    // SIN USO
+  /*   @PutMapping("editar")
     public ResponseEntity<Variable> editar(@RequestBody Variable variable) {
 
         this.variableService.guardar(variable);
 
         return ResponseEntity.status(HttpStatus.OK).body(variable);
 
-    }
+    } */
     
 }

@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,28 +53,34 @@ public class Socio implements Serializable {
     private String apellido;
 
 
-    /* @NotBlank */
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_id")
     private Tipo tipo;
 
+    @NotNull
     private Long cuil;
 
+    @NotBlank
     private String direccion;
 
+    @NotNull
     private Boolean extranjero;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaIngresoLaboral;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaNacimiento;
 
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "variable_id")
@@ -89,6 +96,7 @@ public class Socio implements Serializable {
     @JoinColumn(name = "foto_id")
     private Foto foto;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @JsonFormat(timezone = "GMT-03:00")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -99,49 +107,51 @@ public class Socio implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaBaja;
 
-    /* @NotBlank */
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado_civil_id")
     private EstadoCivil estadoCivil;
 
 
-    /* @NotBlank */
+    @NotNull
     private Integer legajo;
 
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "localidad_id")
     private Localidad localidad;
 
-    /* @NotBlank */
+    @NotBlank
     private String correo;
 
-    @Column(columnDefinition="text", name = "motivo_baja")
+    @Column(columnDefinition="text")
     private String motivoBaja;
 
-    /* @NotBlank */
-    @Column(name = "num_cuenta")
+    @NotNull
     private Long numCuenta;
 
-    /* @NotBlank */
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_documento_id")
     private TipoDocumento tipoDocumento;
     
-    /* @NotBlank */
-    @Column(name = "num_doc")
+    @NotNull
     private Long numDoc;
 
+    @NotNull
     private Boolean baja;
 
+    @NotNull
     private Boolean habilitado;
 
-    /* @NotBlank */
+    @NotNull
     private Long telefono;
 
   
+    @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")

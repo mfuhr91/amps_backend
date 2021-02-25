@@ -19,6 +19,6 @@ public interface IVariableService {
     @Transactional(readOnly = true)
     public Variable buscarPorNombre(String nombre);
 
-    public void guardar(Variable socio);
+    /* public void guardar(Variable socio); */
 
 }
