@@ -1,5 +1,8 @@
 package com.mutual.amps.descuentos.providers;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +22,11 @@ import com.mutual.amps.socios.providers.ISocioService;
 import com.mutual.amps.variables.models.Variable;
 import com.mutual.amps.variables.providers.IVariableService;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -249,11 +257,11 @@ public class DescuentoServiceImpl implements IDescuentoService {
     }
 
     
-    /* @Scheduled(cron="15 * * * * *") */
+    /* @Scheduled(cron="15 * * * * *") cada 15 seg */
     @Override
     @Scheduled(cron="0 0 1 * * *", zone = "America/Argentina/Ushuaia")
     public void guardarCuotaSocial() {
-
+        
         List<Socio> socios = this.socioService.listarTodo();
         
         /* Variable variableDiaCierre = ; */
@@ -264,7 +272,6 @@ public class DescuentoServiceImpl implements IDescuentoService {
         Calendar cal = Calendar.getInstance();
         /* cal.set(Calendar.MONTH, 3); */ // TODO: BORRAR
         Calendar calMesAnterior = this.getFechaCierreMesAnterior(cal, diaCierre + 1);
-        /* System.out.println("********************************:   " + calMesAnterior.getTime()); */
         
         socios.forEach(socio -> {
             
@@ -451,13 +458,4 @@ public class DescuentoServiceImpl implements IDescuentoService {
         return cal;
     }
 
-    
-
-
-
-
-
-    
-
-    
 }
