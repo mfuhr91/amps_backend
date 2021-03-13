@@ -1,5 +1,6 @@
 package com.mutual.amps.descuentos.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import com.mutual.amps.descuentos.providers.IExportarDescuentos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.ByteArrayResource;
-
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -140,6 +141,18 @@ public class DescuentoController {
                 .contentLength(exportedFileData.length)
                 .body(byteArrayResource);
                 
+    }
+
+    @GetMapping("exportar/{mes}")
+    public ResponseEntity<InputStreamResource> exportar(@PathVariable String mes) throws IOException {
+
+        ByteArrayInputStream stream = this.exportarDescuentos.exportarPorMes(mes);
+
+
+        return ResponseEntity.ok()
+                /* .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= descuentos.xlsx") */
+                .body(new InputStreamResource(stream));
+
     }
 
 

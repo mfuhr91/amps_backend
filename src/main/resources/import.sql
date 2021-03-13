@@ -15,7 +15,7 @@ INSERT INTO ESTADOS_CIVILES ( nombre ) VALUES ('Casado');
 INSERT INTO ESTADOS_CIVILES ( nombre ) VALUES ('Divorciado');
 INSERT INTO ESTADOS_CIVILES ( nombre ) VALUES ('Viudo');
 INSERT INTO VARIABLES ( nombre, valor ) VALUES ('Cuota', 880.00);
-INSERT INTO VARIABLES ( nombre, valor ) VALUES ('Comision', 3.00);
+INSERT INTO VARIABLES ( nombre, valor ) VALUES ('Comisión', 3.00);
 INSERT INTO VARIABLES ( nombre, valor ) VALUES ('Valor item', 1500.00);
 INSERT INTO VARIABLES ( nombre, valor ) VALUES ('Fecha de cierre', 25.00);
 INSERT INTO TIPOS ( nombre ) VALUES ('Activo');
