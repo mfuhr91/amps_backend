@@ -309,35 +309,6 @@ public class ExportarDescuentosImpl implements IExportarDescuentos {
 
         return new ByteArrayInputStream(stream.toByteArray());
 
-
-
-
-        /* 
-        
-        private String descripcion;
-    
-        private Date fechaAlta;
-
-        private Date ultimaCuota;
-
-        private Integer numCuotas;
-
-        
-        private Double valorCuota;
-
-        private Double valorSubTotal;
-
-        private Double valorTotal;
-
-        private Socio socio;
-
-        private Convenio convenio;
-
-        private List<Cuota> cuotas;
-
-        private List<Item> items;
-        
-        */
     }
 }
 

@@ -25,7 +25,8 @@ spring:
         contentnegotiation:
             favor-parameter: true
             media-types.pdf: application/pdf
-            media-types.json: application/json
+            
+            
 
 logging:
    level:

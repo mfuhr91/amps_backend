@@ -1,5 +1,7 @@
 package com.mutual.amps.socios.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import com.mutual.amps.usuarios.providers.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -198,6 +201,17 @@ public class SocioController {
     public ResponseEntity<Integer> contar() {
         
         return ResponseEntity.status(HttpStatus.OK).body(this.socioService.contarSocios());
+    }
+
+    @GetMapping("exportar")
+    public ResponseEntity<InputStreamResource> exportar() throws IOException {
+
+        ByteArrayInputStream stream = this.socioService.exportarTodos();
+
+
+        return ResponseEntity.ok()
+                .body(new InputStreamResource(stream));
+
     }
         
 }

@@ -1,5 +1,7 @@
 package com.mutual.amps.socios.providers;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import com.mutual.amps.socios.models.EstadoCivil;
@@ -41,8 +43,9 @@ public interface ISocioService {
 
     @Transactional(readOnly = true)
     public Integer contarSocios();
-
-
+    
+    @Transactional(readOnly = true)
+    public ByteArrayInputStream exportarTodos() throws IOException;
     
     
 }
