@@ -12,6 +12,9 @@ public interface IConvenioService {
 
     @Transactional(readOnly = true)
     public List<Convenio> listarTodo();
+
+    @Transactional(readOnly = true)
+    public List<Convenio> listarTodosNoBaja();
     
     @Transactional(readOnly = true)
     public Convenio buscarPorId(Integer id);

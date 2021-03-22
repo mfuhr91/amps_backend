@@ -1,15 +1,22 @@
 spring:
     datasource:
-        url: ${DB_URL}
-        username: ${DB_USER}
-        password: ${DB_PASS}
+        url: jdbc:mysql://localhost/amps_db?serverTimezone=America/Argentina/Ushuaia
+        username: admin
+        password: 2744mfuhR
+        # url: jdbc:mysql://megasolution.com.ar/amps_db_prueba?serverTimezone=America/Argentina/Ushuaia
+        # username: mfuhr
+        # password: 2744mfuhR
         driver-class-name: com.mysql.cj.jdbc.Driver
 
 
     jpa:
         database-platform: org.hibernate.dialect.MySQL8Dialect
         hibernate:
-            ddl-auto: validate
+            ddl-auto: create-drop
+        # show-sql: true
+        # properties:
+        #     hibernate:
+        #         format_sql: true
     servlet:
         multipart:
             max-file-size: 15MB
@@ -18,17 +25,15 @@ spring:
         contentnegotiation:
             favor-parameter: true
             media-types.pdf: application/pdf
-            media-types.json: application/json
+            
+            
 
 logging:
    level:
         org:
             hibernate:
-                SQL: debug 
-                
+                SQL: debug
+
 jwt:
     secret: secret
     expiration: 36000
-
-server: #IMPORTANTE PARA PODER CONECTARSE DESDE HEROKU
-    port: ${PORT}

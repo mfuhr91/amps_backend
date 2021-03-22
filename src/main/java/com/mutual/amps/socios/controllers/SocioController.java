@@ -2,6 +2,7 @@ package com.mutual.amps.socios.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ import com.mutual.amps.socios.models.Socio;
 import com.mutual.amps.socios.models.Tipo;
 import com.mutual.amps.socios.models.TipoDocumento;
 import com.mutual.amps.socios.providers.ISocioService;
-
+import com.mutual.amps.descuentos.models.Descuento;
 import com.mutual.amps.descuentos.providers.IDescuentoService;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
 
@@ -57,9 +58,13 @@ public class SocioController {
     @GetMapping()
     public ResponseEntity<List<Socio>> listar() {
 
-        System.out.println("Socios listados");
-
         return ResponseEntity.status(HttpStatus.OK).body(this.socioService.listarTodo());
+    }
+
+    @GetMapping("todos-no-baja")
+    public ResponseEntity<List<Socio>> listarTodosNoBaja() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(this.socioService.listarTodosNoBaja());
     }
 
     @GetMapping("tipos_docs")
@@ -115,7 +120,7 @@ public class SocioController {
 
         }
 
-        if(socio.getFoto().getUrl() != "") {
+        if(socio.getFoto().getUrl() != null && socio.getFoto().getUrl().length() > 0) {
             
             this.fotoService.guardarFoto(socio.getFoto());
             socio.setFoto(socio.getFoto());
@@ -129,8 +134,10 @@ public class SocioController {
         
         this.socioService.guardar(socio);
 
-        this.descuentosService.crearDescuentos(socio);
-        
+        if(!socio.getBaja()){
+            this.descuentosService.crearDescuentos(socio);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(socio);
             
     
@@ -152,7 +159,7 @@ public class SocioController {
 
         }
         
-        if(socio.getFoto().getUrl() != "") {
+        if(socio.getFoto().getUrl() != null && socio.getFoto().getUrl().length() > 0) {
             
             this.fotoService.guardarFoto(socio.getFoto());
             socio.setFoto(socio.getFoto());
@@ -169,7 +176,9 @@ public class SocioController {
         
         this.socioService.guardar(socio);
 
-        this.descuentosService.crearDescuentos(socio);
+        if(!socio.getBaja()){
+            this.descuentosService.crearDescuentos(socio);
+        }
         
         return ResponseEntity.status(HttpStatus.OK).body(socio);
         
@@ -189,18 +198,53 @@ public class SocioController {
     }
         
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Socio> eliminar(@PathVariable Integer id) {
-        this.socioService.eliminar(id);
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         
-        Socio socio = new Socio();
+        Socio socio = this.socioService.buscarPorId(id);
         
-        return ResponseEntity.status(HttpStatus.OK).body(socio);
+        
+        List<Descuento> descuentos = this.descuentosService.listarPorSocio(socio);
+        
+        if(descuentos.size() > 0){
+            return ResponseEntity.status(HttpStatus.OK).body(descuentos);
+        } else {
+            
+            this.socioService.eliminar(id);
+            return ResponseEntity.status(HttpStatus.OK).body(id);
+
+        }
+
+    }
+
+    @DeleteMapping("/confirmar-eliminar/{id}")
+    public ResponseEntity<?> confirmarEliminar(@PathVariable Integer id) {
+        
+        Socio socio = this.socioService.buscarPorId(id);
+    
+        if(socio != null){
+
+            this.socioService.eliminar(id);
+
+            return ResponseEntity.status(HttpStatus.OK).body(id);
+        } else {
+            
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        
+
     }
 
     @GetMapping("contar")
     public ResponseEntity<Integer> contar() {
         
-        return ResponseEntity.status(HttpStatus.OK).body(this.socioService.contarSocios());
+        Integer total = this.socioService.contarSocios();
+        if(total != null){
+
+            return ResponseEntity.status(HttpStatus.OK).body(total);
+        } else {
+            
+            return ResponseEntity.status(HttpStatus.OK).body(0);
+        }
     }
 
     @GetMapping("exportar")

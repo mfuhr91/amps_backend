@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 @Service
 @EnableScheduling
 public class DescuentoServiceImpl implements IDescuentoService {
-
+    
     @Autowired
     private IDescuentoRepo descuentoRepo;
 
@@ -252,6 +252,11 @@ public class DescuentoServiceImpl implements IDescuentoService {
     }
 
     @Override
+    public Double sumarTotalRecaudadoMes() {
+        return this.descuentoRepo.sumarTotalRecaudadoMes();
+    }
+
+    @Override
     public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion ) {
        return this.descuentoRepo.buscarDescuentoBySocioByFechaAltaByDescripcion(socioId, fechaAlta, descripcion);
     }
@@ -262,7 +267,7 @@ public class DescuentoServiceImpl implements IDescuentoService {
     @Scheduled(cron="0 0 1 * * *", zone = "America/Argentina/Ushuaia")
     public void guardarCuotaSocial() {
         
-        List<Socio> socios = this.socioService.listarTodo();
+        List<Socio> socios = this.socioService.listarTodosNoBaja();
         
         /* Variable variableDiaCierre = ; */
         
@@ -457,5 +462,9 @@ public class DescuentoServiceImpl implements IDescuentoService {
         }
         return cal;
     }
+
+   
+
+    
 
 }

@@ -15,6 +15,9 @@ public interface ISocioService {
 
     @Transactional(readOnly = true)
     public List<Socio> listarTodo();
+
+    @Transactional(readOnly = true)
+    public List<Socio> listarTodosNoBaja();
     
     @Transactional(readOnly = true)
     public Socio buscarPorId(Integer id);

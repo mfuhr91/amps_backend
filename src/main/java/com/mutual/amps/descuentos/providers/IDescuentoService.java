@@ -44,6 +44,7 @@ public interface IDescuentoService {
     @Transactional(readOnly = true)
     public List<Descuento> getDescuentosByFecha(String fecha);
 
+
     public void guardarCuotaSocial();
 
     public void crearDescuentos(Socio socio);
@@ -52,9 +53,13 @@ public interface IDescuentoService {
     public Double sumarTotalRecaudado();
     
     @Transactional(readOnly = true)
+    public Double sumarTotalRecaudadoMes();
+
+    @Transactional(readOnly = true)
     public Descuento buscarDescuentoPorSocioPorFechaAltaPorDescripcion(Integer socioId, Date fechaAlta, String descripcion );
 
     @Transactional(readOnly = true)
     public List<Cuota> listarCuotasPorDescuento(Descuento descuento);
+
 
 }

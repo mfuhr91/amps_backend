@@ -14,11 +14,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IConvenioRepo extends JpaRepository<Convenio, Integer>{
 
+    @Query(value = "SELECT * FROM convenios ORDER BY nombre ASC", nativeQuery = true)
+    public List<Convenio> findAll();
+
+    @Query(value = "SELECT * FROM convenios WHERE baja = false ORDER BY nombre ASC", nativeQuery = true)
+    public List<Convenio> findAllNoBaja();
 
     @Query(value = "SELECT * FROM convenios WHERE cuit LIKE %:param% OR contacto LIKE %:param% OR nombre LIKE %:param% OR telefono LIKE %:param% OR direccion LIKE %:param%", nativeQuery = true)
     public List<Convenio> findByParam(@Param("param") String param);
 
-    @Query(value = "SELECT COUNT(*) FROM convenios", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM convenios WHERE baja = false", nativeQuery = true)
     public Integer contarConvenios();
 
     public List<Convenio> findByCategoria(Categoria categoria);

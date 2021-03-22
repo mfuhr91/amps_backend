@@ -56,6 +56,11 @@ public class SocioServiceImpl implements ISocioService {
     }
 
     @Override
+    public List<Socio> listarTodosNoBaja() {
+       return this.socioRepo.findAllNoBaja();
+    }
+
+    @Override
     public Socio buscarPorId(Integer id) {
 
         return this.socioRepo.findById(id).orElse(null);
@@ -336,6 +341,8 @@ public class SocioServiceImpl implements ISocioService {
         return new ByteArrayInputStream(stream.toByteArray());
 
     }
+
+   
 
 
     

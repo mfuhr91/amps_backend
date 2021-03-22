@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IFotoRepo extends JpaRepository<Foto, Integer>{
+
+    public Foto findByPublicId(String publicId);
     
 }

@@ -29,13 +29,18 @@ public class UsuarioPrincipal implements UserDetails {
    
     public static UsuarioPrincipal build(Usuario usuario) {
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(usuario.getRol().getNombreRol()); 
         
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+            GrantedAuthority authority = new SimpleGrantedAuthority(usuario.getRol().getNombreRol()); 
+            
+            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    
+            authorities.add(authority);
 
-        authorities.add(authority);
+            return new UsuarioPrincipal(usuario.getId(), usuario.getNombreUsuario(), usuario.getContrasena(), authorities);
+        
 
-        return new UsuarioPrincipal(usuario.getId(), usuario.getNombreUsuario(), usuario.getContrasena(), authorities);
+
+
     }
 
     public Integer getId() {

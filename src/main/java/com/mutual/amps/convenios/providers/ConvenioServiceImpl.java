@@ -22,6 +22,11 @@ public class ConvenioServiceImpl implements IConvenioService {
     }
 
     @Override
+    public List<Convenio> listarTodosNoBaja() {
+       return this.convenioRepo.findAllNoBaja();
+    }
+
+    @Override
     public Convenio buscarPorId(Integer id) {
         return this.convenioRepo.findById(id).orElse(null);
     }

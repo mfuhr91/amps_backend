@@ -9,6 +9,7 @@ import com.mutual.amps.categorias.models.Categoria;
 import com.mutual.amps.categorias.providers.ICategoriaService;
 import com.mutual.amps.convenios.models.Convenio;
 import com.mutual.amps.convenios.providers.IConvenioService;
+import com.mutual.amps.fotos.models.Foto;
 import com.mutual.amps.fotos.providers.IFotoService;
 import com.mutual.amps.usuarios.models.Usuario;
 import com.mutual.amps.usuarios.providers.IUsuarioService;
@@ -51,6 +52,12 @@ public class ConvenioController {
         return ResponseEntity.status(HttpStatus.OK).body(convenioService.listarTodo());
     }
 
+    @GetMapping("todos-no-baja")
+    public ResponseEntity<List<Convenio>> listarTodosNoBaja() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.listarTodosNoBaja());
+    }
+
     @GetMapping("editar/{id}")
     public ResponseEntity<Convenio> buscarPorId(@PathVariable Integer id) {
 
@@ -70,13 +77,15 @@ public class ConvenioController {
 
         }
 
-        if(convenio.getFoto().getUrl() != "") {
-
-            fotoService.guardarFoto(convenio.getFoto());
+        if(convenio.getFoto().getUrl() != null && convenio.getFoto().getUrl().length() > 0 ) {
+            
+            this.fotoService.guardarFoto(convenio.getFoto());
             convenio.setFoto(convenio.getFoto());
         } else {
+        
             convenio.setFoto(null);
         }
+
         
         usuarioService.guardar(convenio.getUsuario());
         convenio.setUsuario(convenio.getUsuario());
@@ -100,19 +109,29 @@ public class ConvenioController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
         }
-        
-        if(convenio.getFoto().getUrl() != "") {
+    
 
-            fotoService.guardarFoto(convenio.getFoto());
+        if(convenio.getFoto().getUrl() != null && convenio.getFoto().getUrl().length() > 0 ) {
+            
+            this.fotoService.guardarFoto(convenio.getFoto());
             convenio.setFoto(convenio.getFoto());
         } else {
+        
             convenio.setFoto(null);
+        }
+
+        if(convenio.getId() == 1){
+
+            convenio.setUsuario(null);
+        } else {
+
+            usuarioService.guardar(convenio.getUsuario());
+    
+            convenio.setUsuario(convenio.getUsuario());
+
         }
         
 
-        usuarioService.guardar(convenio.getUsuario());
-
-        convenio.setUsuario(convenio.getUsuario());
 
         convenioService.guardar(convenio);
 
@@ -155,8 +174,16 @@ public class ConvenioController {
 
     @GetMapping("contar")
     public ResponseEntity<Integer> contar() {
+
+        Integer total = this.convenioService.contarConvenios();
+        if(total != null){
+
+            return ResponseEntity.status(HttpStatus.OK).body(total);
+        } else {
+            
+            return ResponseEntity.status(HttpStatus.OK).body(0);
+        }
         
-        return ResponseEntity.status(HttpStatus.OK).body(this.convenioService.contarConvenios() - 1);
     }
 
     @GetMapping("categoria/{nombreCategoria}")

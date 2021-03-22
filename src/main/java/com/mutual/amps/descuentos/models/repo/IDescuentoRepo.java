@@ -24,12 +24,12 @@ public interface IDescuentoRepo extends JpaRepository<Descuento, Long>{
     public List<Descuento> getDescuentosByFechaCuota(@Param("param") String param);
 
     public List<Descuento> findByDescripcion(String descripcion);
-
-    @Query(value = "SELECT * FROM descuentos WHERE fecha_alta > %:param%", nativeQuery = true)
-    public List<Descuento> findByFechaAltaBiggerThan(@Param("param") Date fechaAlta);
-
+    
     @Query( value= "SELECT SUM(valor_total) FROM descuentos", nativeQuery = true)
     public Double sumarTotalRecaudado();
+    
+    @Query( value= "SELECT SUM(valor_total) FROM descuentos WHERE MONTH(fecha_alta) = MONTH(CURRENT_TIMESTAMP)", nativeQuery = true)
+    public Double sumarTotalRecaudadoMes();
 
     @Query( value = "SELECT * FROM descuentos WHERE socio_id = :socioId AND fecha_alta > :fechaAlta AND descripcion = :descripcion", nativeQuery = true )
     public Descuento buscarDescuentoBySocioByFechaAltaByDescripcion(@Param("socioId") Integer socioId, @Param("fechaAlta") Date fechaAlta, @Param("descripcion") String descripcion);

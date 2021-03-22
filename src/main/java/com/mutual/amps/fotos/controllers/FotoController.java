@@ -3,8 +3,14 @@ package com.mutual.amps.fotos.controllers;
 import java.io.IOException;
 import java.util.Map;
 
+import com.mutual.amps.convenios.models.Convenio;
+import com.mutual.amps.convenios.providers.IConvenioService;
 import com.mutual.amps.fotos.models.Foto;
 import com.mutual.amps.fotos.providers.CloudinaryService;
+import com.mutual.amps.fotos.providers.IFotoService;
+import com.mutual.amps.socios.models.Socio;
+import com.mutual.amps.socios.models.repo.ISocioRepo;
+import com.mutual.amps.socios.providers.ISocioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +29,10 @@ public class FotoController {
 
     @Autowired
     private CloudinaryService cloudinaryService;
+
+    @Autowired
+    private IFotoService fotoService;
+
     
     @PostMapping("/subir_foto")
     public ResponseEntity<Foto> subirFoto(@RequestParam(value = "foto") MultipartFile file, @RequestParam(value = "tipo") String tipo ) throws IOException {      
@@ -43,13 +53,15 @@ public class FotoController {
     }
 
     @DeleteMapping("/borrar_foto")
-    public ResponseEntity<Foto> borrarFoto(@RequestParam String org, @RequestParam String folder, @RequestParam String nombre) throws IOException {     
+    public ResponseEntity<?> borrarFoto(@RequestParam String tipo, @RequestParam String idString, @RequestParam String org, @RequestParam String folder, @RequestParam String numero) throws IOException {     
         
-        String publicId = org.concat("/").concat(folder).concat("/").concat(nombre);          
+        
+        String publicId = org.concat("/").concat(folder).concat("/").concat(numero); 
+
+        Foto foto = this.fotoService.eliminarFotoSegunIdYTipo(tipo, idString, publicId);
+
  
         System.out.println(this.cloudinaryService.delete(publicId));
-
-        Foto foto = new Foto();
 
         return ResponseEntity.status(HttpStatus.OK).body(foto);
     }

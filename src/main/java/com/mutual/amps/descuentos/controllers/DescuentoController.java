@@ -117,8 +117,26 @@ public class DescuentoController {
 
     @GetMapping("total")
     public ResponseEntity<Double> totalRecuadado() {
+        Double total = this.descuentoService.sumarTotalRecaudado();
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.descuentoService.sumarTotalRecaudado());
+        if(total != null){
+            
+            return ResponseEntity.status(HttpStatus.OK).body(this.descuentoService.sumarTotalRecaudado());
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(0.00);
+        }
+    }
+    
+    @GetMapping("totalMes")
+    public ResponseEntity<Double> totalRecuadadoMes() {
+        Double total = this.descuentoService.sumarTotalRecaudadoMes();
+        if(total != null){
+            return ResponseEntity.status(HttpStatus.OK).body(this.descuentoService.sumarTotalRecaudadoMes());
+        } else {
+
+            return ResponseEntity.status(HttpStatus.OK).body(0.00);
+        }
     }
 
     @GetMapping("descargar/{mes}")
